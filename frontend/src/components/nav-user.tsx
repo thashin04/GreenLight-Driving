@@ -17,6 +17,7 @@ export function NavUser({
 }: {
   user: {
     name: string
+    score: number
     message: string
     avatar: string
   }
@@ -31,7 +32,7 @@ export function NavUser({
         >
           <Avatar className="h-8 w-8 rounded-full">
             <AvatarImage src={user.avatar} alt={user.name} />
-            <AvatarFallback className="rounded-lg bg-darkBlue text-white">TB</AvatarFallback>
+            <AvatarFallback className="rounded-lg bg-darkBlue text-white">{user.score}</AvatarFallback>
           </Avatar>
           <div className="grid flex-1 text-left text-sm leading-tight">
             <span className="truncate font-bold">{user.name}</span>

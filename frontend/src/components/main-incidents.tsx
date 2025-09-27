@@ -6,108 +6,46 @@ import { useEffect, useState } from "react";
 import { IncidentsSearch } from "./incidents-search";
 
 async function getData(): Promise<Incident[]> {
-  // Fetch data from API here
-  return [
-    {
-        id: "ID-abc",
-        type: "good", 
-        severity: "low", 
-        date: "2025-12-12",
-        time: "00:00:00"
-    },
-    {
-        id: "ID-bitch",
-        type: "bad", 
-        severity: "medium", 
-        date: "2025-12-12",
-        time: "00:00:00"
-    },
-    {
-        id: "ID-hi",
-        type: "worse", 
-        severity: "high", 
-        date: "2025-12-12",
-        time: "00:00:00"
-    },
-    {
-        id: "ID-yas",
-        type: "bad", 
-        severity: "high", 
-        date: "2025-12-12",
-        time: "00:00:00"
-    },
-    {
-        id: "ID",
-        type: "bad", 
-        severity: "low", 
-        date: "2025-12-12",
-        time: "00:00:00"
-    },
-    {
-        id: "ID",
-        type: "bad", 
-        severity: "high", 
-        date: "2025-12-12",
-        time: "00:00:00"
-    },
-    {
-        id: "ID",
-        type: "bad",  
-        severity: "low", 
-        date: "2025-12-12",
-        time: "00:00:00"
-    },
-   {
-        id: "ID",
-        type: "good", 
-        severity: "low", 
-        date: "2025-12-12",
-        time: "00:00:00"
-    },
-    {
-        id: "ID",
-        type: "bad", 
-        severity: "medium", 
-        date: "2025-12-12",
-        time: "00:00:00"
-    },
-    {
-        id: "ID",
-        type: "worse", 
-        severity: "high", 
-        date: "2025-12-12",
-        time: "00:00:00"
-    },
-    {
-        id: "ID",
-        type: "bad", 
-        severity: "high", 
-        date: "2025-12-12",
-        time: "00:00:00"
-    },
-    {
-        id: "ID",
-        type: "bad", 
-        severity: "low", 
-        date: "2025-12-12",
-        time: "00:00:00"
-    },
-    {
-        id: "ID",
-        type: "bad", 
-        severity: "high", 
-        date: "2025-12-12",
-        time: "00:00:00"
-    },
-    {
-        id: "ID",
-        type: "bad",  
-        severity: "low", 
-        date: "2025-12-12",
-        time: "00:00:00"
-    },
-    
-  ]
+  const token = localStorage.getItem("accessToken");
+  if (!token) {
+    console.error("Authentication token not found.");
+    return [];
+  }
+
+  try {
+    const response = await fetch("http://127.0.0.1:8000/incidents/getAll", {
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch incidents.");
+    }
+
+    const backendIncidents = await response.json();
+
+    return backendIncidents.map((incident: any) => {
+      const createdAt = new Date(incident.created_at);
+
+      const words = incident.incident_summary.split(' ');
+      const trimmedSummary = words.length > 5
+        ? words.slice(0, 5).join(' ') + '...'
+        : incident.incident_summary;
+      return {
+        id: incident.incident_id.split('-')[0],
+        type: trimmedSummary,
+        severity: incident.severity,
+        date: createdAt.toLocaleDateString(),
+        time: createdAt.toLocaleTimeString(),
+        status: incident.status,
+      };
+    });
+
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return []; 
+  }
 }
 
 export function MainIncidents({ className, ...props }: React.ComponentProps<"div">) {
