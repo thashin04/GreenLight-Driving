@@ -86,7 +86,7 @@ function Tab({ name, url, icon: Icon, active }: BottomRoute & { active?: boolean
 
 export function ExampleMobileNav() {
   const items: BottomRoute[] = [
-    { name: "Dashboard", url: "/", icon: LayoutDashboard },
+    { name: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
     { name: "Incidents", url: "/incidents", icon: Car },
     { name: "Quizzes", url: "/quizzes", icon: Notebook },
     { name: "Settings", url: "/settings", icon: Settings },
