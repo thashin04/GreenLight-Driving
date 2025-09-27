@@ -31,7 +31,7 @@ export function NavRoutes({
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden flex flex-col gap-5">
-      <Button className="h-15 text-md flex gap-5 cursor-pointer">
+      <Button className="h-15 text-md flex gap-4 cursor-pointer hover:bg-gray-600">
         <Upload className="size-5"/>
         Upload Video
       </Button>
@@ -40,8 +40,8 @@ export function NavRoutes({
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild className={`h-13 text-md flex gap-5 rounded-md px-3 py-2 ${
               currentPath === item.url 
-                ? 'bg-gray-500 text-white' 
-                : 'hover:bg-gray-100'
+                ? 'bg-gray-500 text-white hover:bg-gray-300' 
+                : 'hover:bg-gray-300'
             }`}>
               <a href={item.url}>
                 <item.icon className="!w-5 !h-5"/>

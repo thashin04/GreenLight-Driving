@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Trophy, ChartNoAxesColumnIncreasing} from 'lucide-react';
+import { Trophy, ChartNoAxesColumnIncreasing, MoveRight} from 'lucide-react';
 
 function MainDashboard({ className, ...props }: React.ComponentProps<"div">) {
   return (
@@ -15,10 +15,10 @@ function MainDashboard({ className, ...props }: React.ComponentProps<"div">) {
                 <p className="text-xl font-medium">Recent Achievements</p>
             </div>
             <div className="flex flex-col flex-1 gap-2 py-3">
-                <div className="bg-gray-300 rounded-lg border h-1/4"></div>
-                <div className="bg-gray-300 rounded-lg border h-1/4"></div>
-                <div className="bg-gray-300 rounded-lg border h-1/4"></div>
-                <div className="bg-gray-300 rounded-lg border h-1/4"></div>
+                <div className="bg-gray-300 rounded-lg border flex-1 cursor-pointer hover:bg-gray-200"></div>
+                <div className="bg-gray-300 rounded-lg border flex-1 cursor-pointer hover:bg-gray-200"></div>
+                <div className="bg-gray-300 rounded-lg border flex-1 cursor-pointer hover:bg-gray-200"></div>
+                <div className="bg-gray-300 rounded-lg border flex-1 cursor-pointer hover:bg-gray-200"></div>
             </div>
         </div>
         <div className="flex flex-col border rounded-lg border-black w-1/3 px-3">
@@ -27,22 +27,31 @@ function MainDashboard({ className, ...props }: React.ComponentProps<"div">) {
                 <p className="text-xl font-medium">Your Stats</p>
             </div>
             <div className="flex flex-col flex-1 gap-3 py-3">
-                <div className="flex justify-center bg-gray-300 rounded-lg border h-1/3">
+                <div className="flex justify-center bg-gray-300 rounded-lg border flex-1 cursor-pointer hover:bg-gray-200 group relative">
                     <div className="flex flex-col items-center justify-center">
                         <p className="text-4xl">85</p>
                         <p className="text-sm">safety score</p>
                     </div>
+                    <div className="absolute right-5 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+                        <MoveRight className="w-10 h-10" />
+                    </div>
                 </div>
-                <div className="flex justify-center bg-gray-300 rounded-lg border h-1/3">
+                <div className="flex justify-center bg-gray-300 rounded-lg border flex-1 cursor-pointer hover:bg-gray-200 group relative">
                     <div className="flex flex-col items-center justify-center">
                         <p className="text-4xl">12</p>
                         <p className="text-sm">daily quiz streak</p>
                     </div>
+                    <div className="absolute right-5 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+                        <MoveRight className="w-10 h-10" />
+                    </div>
                 </div>
-                <div className="flex justify-center bg-gray-300 rounded-lg border h-1/3">
+                <div className="flex justify-center bg-gray-300 rounded-lg border flex-1 cursor-pointer hover:bg-gray-200 group relative">
                     <div className="flex flex-col items-center justify-center">
                         <p className="text-4xl">38</p>
                         <p className="text-sm">resolved incidents</p>
+                    </div>
+                    <div className="absolute right-5 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+                        <MoveRight className="w-10 h-10" />
                     </div>
                 </div>
             </div>
