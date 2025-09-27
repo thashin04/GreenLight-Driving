@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Menu, CircleQuestionMark, Sun, Moon } from "lucide-react";
+import { Menu, CircleQuestionMark, Sun, Moon, LogOut } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useSidebar } from "@/components/ui/sidebar";
@@ -51,7 +51,7 @@ export function SiteHeader() {
 
       <button
         aria-label="Toggle dark mode"
-        className="inline-flex h-8 w-8 items-center justify-center rounded-md hover:opacity-80 focus-visible:outline-none"
+        className="inline-flex h-8 w-8 items-center justify-center rounded-md hover:opacity-80 focus-visible:outline-none cursor-pointer"
         onClick={() => setTheme(t => (t === "dark" ? "light" : "dark"))}
         title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
       >
@@ -60,6 +60,10 @@ export function SiteHeader() {
         ) : (
           <Sun className="size-8 text-midBlue fill-midBlue" />
         )}
+      </button>
+
+      <button>
+      <LogOut className="size-8 text-darkBlue fill-lightPurple dark:text-lightPurple dark:fill-darkBlue/30 cursor-pointer" />
       </button>
     </div>
   </div>
