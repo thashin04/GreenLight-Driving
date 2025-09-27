@@ -3,6 +3,18 @@
 import { type ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal, ArrowUpDown } from "lucide-react"
 import { Checkbox } from "@/components/ui/checkbox"
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
  
 import { Button } from "@/components/ui/button"
 import {
@@ -149,7 +161,21 @@ export const columns: ColumnDef<Incident>[] = [
               <DropdownMenuItem className="cursor-pointer">View incident details</DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer">View dashcam footage</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-red-500 cursor-pointer">Delete incident</DropdownMenuItem>
+              <AlertDialog>
+                <AlertDialogTrigger className="text-red-500 cursor-pointer relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden">Delete incident</AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader className="flex flex-col gap-4">
+                    <AlertDialogTitle>Delete confirmation</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. This will permanently delete this selected incident from our servers
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction>Confirm</AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
