@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useNavigate } from "react-router-dom";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "@/firebase";
 
 function AuthShell({ title, subtitle, children }: { title: string; subtitle?: string; children: React.ReactNode }) {
   return (
@@ -24,6 +27,65 @@ export default function LoginPage() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [showPassword, setShowPassword] = React.useState(false);
+  const [error, setError] = React.useState("");
+  const navigate = useNavigate();
+
+  const handleGoogleLogin = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      
+      const idToken = await result.user.getIdToken();
+
+      const response = await fetch("http://127.0.0.1:8000/auth/google/login", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: idToken }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.detail || "Google login failed.");
+      }
+
+      localStorage.setItem("accessToken", data.access_token);
+      navigate("/dashboard");
+
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+
+    try {
+      const response = await fetch("http://127.0.0.1:8000/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.detail || "Failed to log in.");
+      }
+      
+      localStorage.setItem("accessToken", data.access_token);
+      
+      navigate("/dashboard");
+
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
 
   return (
     <AuthShell title="Welcome back!" subtitle="Log in to your account!">
@@ -31,7 +93,7 @@ export default function LoginPage() {
         <Button
           variant="outline"
           className="h-11 px-6 w-full flex items-center justify-center gap-2"
-          onClick={() => console.log("Login with Google clicked")}
+          onClick={handleGoogleLogin}
         >
           <img
             src="https://www.svgrepo.com/show/475656/google-color.svg"
@@ -47,7 +109,8 @@ export default function LoginPage() {
           <div className="flex-grow border-b"></div>
         </div>
 
-        <form onSubmit={(e) => e.preventDefault()} className="grid gap-4">
+        <form onSubmit={handleLogin} className="grid gap-4">
+          {error && <p className="text-xs text-center text-red-600">{error}</p>}
           <label className="grid gap-2 text-sm">
             <span className="font-medium">Email</span>
             <div className="relative">
@@ -84,7 +147,7 @@ export default function LoginPage() {
               </button>
             </div>
           </label>
-          <Button type="submit" className="h-11 px-6">Sign in</Button>
+          <Button type="submit" className="h-11 px-6 cursor-pointer">Sign in</Button>
           <p className="text-xs text-center opacity-80">
             Don't have an account? <Link to="/signup" className="font-bold underline">Register</Link>
           </p>
