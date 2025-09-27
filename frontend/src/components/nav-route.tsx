@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 
 import {
   Upload,
@@ -208,10 +208,10 @@ export function NavRoutes({
                 ? 'bg-darkPurple/20 text-darkBLue backdrop-blur-3xl font-semibold border-1 border-darkPurple/20 dark:border-darkPurple/40 hover:bg-darkPurple/25' 
                 : 'hover:bg-gray-300/30 hover:dark:bg-darkPurple/20'
             }`}>
-              <a href={item.url}>
+              <Link to={item.url}> 
                 <item.icon className="!w-5 !h-5"/>
                 <span>{item.name}</span>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         ))}
