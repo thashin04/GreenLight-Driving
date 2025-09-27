@@ -19,7 +19,7 @@ const data = {
     message: "Keep up the great work!",
     avatar: "/avatars/shadcn.jpg",
   },
-  projects: [
+  pages: [
     {
       name: "Dashboard",
       url: "/dashboard",
@@ -45,7 +45,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       {...props}
     >
       <SidebarContent>
-        <NavRoutes projects={data.projects} />
+        <NavRoutes pages={data.pages} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
