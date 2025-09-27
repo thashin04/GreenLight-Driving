@@ -1,4 +1,6 @@
 import { cn } from "@/lib/utils";
+import { QuizCard } from "./quiz";
+
 import { 
     ClipboardCheck, 
     ChartLine, 
@@ -9,7 +11,7 @@ import {
     Car
 } from 'lucide-react';
 
-import { Button } from "@/components/ui/button"
+// import { Button } from "@/components/ui/button"
 
 function MainQuizzes({ className, ...props }: React.ComponentProps<"div">) {
   return (
@@ -79,62 +81,34 @@ function MainQuizzes({ className, ...props }: React.ComponentProps<"div">) {
             <div className="flex flex-col gap-5 min-h-[15vh] rounded-lg border-1 border-midBlue/40 dark:border-darkPurple/35 bg-white/30 dark:bg-darkBlue/50 backdrop-blur-3xl p-5">
                 <h1 className="text-lg font-medium">Available Quizzes</h1>
                 <div className="flex flex-col gap-3 flex-1 overflow-y-auto">
-                    <div className="flex justify-between items-center px-5 py-3 rounded-lg border border-midBlue/20 bg-white/20 dark:bg-midBlue/40  min-h-[75px] flex-1 hover:bg-white/10 transition-all">
-                        <div className="flex items-center gap-3">
-                            <Hand />
-                            <div className="flex flex-col">
-                                <p className="text-md font-medium">Stop Sign Rules</p>
-                                <p className="text-xs">Master proper stop sign procedures</p>
-                            </div>
-                        </div>
-                        <div className="flex gap-3 items-center">
-                            <p>10 questions</p>
-                            <Button className="cursor-pointer bg-midBlue hover:bg-darkBlue dark:bg-lightPurple dark:hover:bg-lightPurple/90">Start Quiz</Button>
-                        </div>
-                    </div>
-                    <div className="flex justify-between items-center px-5 py-3 rounded-lg border border-midBlue/20 bg-white/20 dark:bg-midBlue/40  min-h-[75px] flex-1 hover:bg-white/10 transition-all">
-                        <div className="flex items-center gap-3">
-                            <CarFront />
-                            <div className="flex flex-col">
-                                <p className="text-md font-medium">Defensive Driving</p>
-                                <p className="text-xs">Learn to anticipate and avoid hazards</p>
-                            </div>
-                        </div>
-                        <div className="flex gap-3 items-center">
-                            <p>15 questions</p>
-                            <Button className="cursor-pointer bg-midBlue hover:bg-darkBlue dark:bg-lightPurple dark:hover:bg-lightPurple/90">Start Quiz</Button>
-                        </div>
-                    </div>
-                    <div className="flex justify-between items-center px-5 py-3 rounded-lg border border-midBlue/20 bg-white/20 dark:bg-midBlue/40  min-h-[75px] flex-1 hover:bg-white/10 transition-all">
-                        <div className="flex items-center gap-3">
-                            <Move />
-                            <div className="flex flex-col">
-                                <p className="text-md font-medium">4-Way Intersections</p>
-                                <p className="text-xs">Navigate complex intersections safely</p>
-                            </div>
-                        </div>
-                        <div className="flex gap-3 items-center">
-                            <p>8 questions</p>
-                            <Button className="cursor-pointer bg-midBlue hover:bg-darkBlue dark:bg-lightPurple dark:hover:bg-lightPurple/90">Start Quiz</Button>
-                        </div>
-                    </div>
-                    <div className="flex justify-between items-center px-5 py-3 rounded-lg border border-midBlue/20 bg-white/20 dark:bg-midBlue/40  min-h-[75px] flex-1 hover:bg-white/10 transition-all">
-                        <div className="flex items-center gap-3">
-                            <Car/>
-                            <div className="flex flex-col">
-                                <p className="text-md font-medium">Proper Braking</p>
-                                <p className="text-xs">Master smooth and safe braking techniques</p>
-                            </div>
-                        </div>
-                        <div className="flex gap-3 items-center">
-                            <p>12 questions</p>
-                            <Button className="cursor-pointer bg-midBlue hover:bg-darkBlue dark:bg-lightPurple dark:hover:bg-lightPurple/90">Start Quiz</Button>
-                        </div>
-                    </div>
-
-
-                    
-
+                    <QuizCard
+                        Icon={Hand}
+                        title="Stop Sign Rules"
+                        description="Master proper stop sign procedures"
+                        questionCount="10 questions"
+                        onStartQuiz={() => console.log('stop sign rules quiz started')}
+                    />
+                    <QuizCard
+                        Icon={CarFront}
+                        title="Defensive Driving"
+                        description="Learn to anticipate and avoid hazards"
+                        questionCount="12 questions"
+                        onStartQuiz={() => console.log('defensive driving quiz started')}
+                    />
+                    <QuizCard
+                        Icon={Move}
+                        title="4-Way Intersections"
+                        description="Navigate complex intersections safely"
+                        questionCount="8 questions"
+                        onStartQuiz={() => console.log('4 way intersections quiz started')}
+                    />
+                    <QuizCard
+                        Icon={Car}
+                        title="Proper Braking"
+                        description="Master smooth and safe braking techniques"
+                        questionCount="12 questions"
+                        onStartQuiz={() => console.log('proper braking quiz started')}
+                    />
                 </div>
             </div>
         </div>
