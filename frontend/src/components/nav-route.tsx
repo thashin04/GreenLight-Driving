@@ -1,3 +1,5 @@
+import { useLocation } from 'react-router-dom';
+
 import {
   Upload,
   type LucideIcon,
@@ -22,6 +24,11 @@ export function NavRoutes({
   }[]
 }) {
 
+  
+
+  const location = useLocation();
+  const currentPath = location.pathname;
+
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden flex flex-col gap-5">
       <Button className="h-15 text-md flex gap-5 cursor-pointer">
@@ -30,8 +37,12 @@ export function NavRoutes({
       </Button>
       <SidebarMenu className="flex flex-col gap-2">
         {projects.map((item) => (
-          <SidebarMenuItem key={item.name} >
-            <SidebarMenuButton asChild className="h-13 text-md flex gap-5">
+          <SidebarMenuItem key={item.name}>
+            <SidebarMenuButton asChild className={`h-13 text-md flex gap-5 rounded-md px-3 py-2 ${
+              currentPath === item.url 
+                ? 'bg-gray-500 text-white' 
+                : 'hover:bg-gray-100'
+            }`}>
               <a href={item.url}>
                 <item.icon className="!w-5 !h-5"/>
                 <span>{item.name}</span>

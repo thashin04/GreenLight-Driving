@@ -19,7 +19,7 @@ export default function DashboardPage() {
         <div className="flex flex-1">
           <AppSidebar />
           <SidebarInset>
-            <MainDashboard className="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min m-10" />
+            <MainDashboard className="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min m-12 mb-28" />
           </SidebarInset>
         </div>
       </SidebarProvider>
