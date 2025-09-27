@@ -18,17 +18,22 @@ rest_api_url = f"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPa
 @router.post("/signup", status_code=status.HTTP_201_CREATED)
 def create_user(user_data: UserCreate):
     try:
+        display_name = f"{user_data.first_name} {user_data.last_name}"
         new_user = firebase_auth.create_user(
             email=user_data.email,
             password=user_data.password,
-            display_name=user_data.name
+            display_name=display_name
         )
         
         user_doc_ref = db.collection('users').document(new_user.uid)
         user_doc_ref.set({
             'email': new_user.email,
-            'name': new_user.display_name,
+            'first_name': user_data.first_name,
+            'last_name': user_data.last_name,
             'createdAt': new_user.user_metadata.creation_timestamp,
+            'safety_score': 0,
+            'daily_quiz_streak': 0,
+            'resolved_incidents': 0,
         })
 
         return {"message": "User created successfully", "uid": new_user.uid}
