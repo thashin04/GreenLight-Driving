@@ -64,7 +64,7 @@ export function AppSidebar({ user, ...props }: any) {
       {...props}
     >
       <SidebarContent>
-        <NavRoutes projects={projects} />
+        <NavRoutes pages={projects} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={userDataForNav} />
