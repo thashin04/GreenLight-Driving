@@ -1,3 +1,4 @@
+"""
 from fastapi import APIRouter, HTTPException, Depends
 from schemas.incident import Incident, IncidentCreate, IncidentUpdate
 from core.firebase_setup import db
@@ -65,3 +66,4 @@ def update_incident(
     
     updated_doc = incident_ref.get()
     return Incident.model_validate(updated_doc.to_dict())
+"""
