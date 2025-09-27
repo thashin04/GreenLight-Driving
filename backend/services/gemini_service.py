@@ -43,3 +43,36 @@ def generate_quiz_from_topic(topic: str, experience: str) -> dict:
     except Exception as e:
         print(f"Error generating or parsing quiz: {e}")
         return None
+      
+def generate_new_quiz_with_new_topic(experience: str, excluded_topics: list) -> dict:
+    excluded_topics_str = ", ".join(f'"{topic}"' for topic in excluded_topics)
+
+    prompt = f"""
+    You are a driving instructor creating a quiz for a driver with {experience} experience.
+
+    Your first task is to invent a new, specific driving-related quiz topic. This topic MUST NOT be any of the following: [{excluded_topics_str}]. Good examples are "Handling Tire Blowouts", "Navigating Roundabouts", or "Understanding Dashboard Warning Lights".
+
+    Your second task is to generate a 5-question quiz for that new topic you just invented. Include at least one true/false question and use "All of the above" sparingly.
+
+    Your final output MUST be a single, valid JSON object for the quiz you generated. Do not include any other text, just the JSON. The JSON must follow this exact format:
+    {{
+      "topic": "The New Topic You Invented",
+      "questions": [
+        {{
+          "question_text": "...",
+          "question_type": "multiple_choice",
+          "options": ["...", "...", "...", "..."],
+          "correct_answer_index": 0
+        }}
+      ]
+    }}
+    """
+    try:
+        response = gemini_flash_model.generate_content(prompt)
+        cleaned_response = response.text.strip().replace("```json", "").replace("```", "")
+        quiz_data = json.loads(cleaned_response)
+        QuizInDB(**quiz_data)
+        return quiz_data
+    except Exception as e:
+        print(f"Error generating new dynamic quiz: {e}")
+        return None

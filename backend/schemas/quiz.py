@@ -1,6 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel, Field
-from typing import List
+from typing import List, Optional
 from enum import Enum
 
 class QuestionType(str, Enum):
@@ -23,8 +23,37 @@ class QuizInDB(BaseModel):
 class QuestionForUser(BaseModel):
     question_text: str
     options: List[str]
+
+# Model for user's submission
+class UserAnswer(BaseModel):
+    question_index: int
+    selected_answer_index: int
+
+class QuizSubmission(BaseModel):
+    answers: List[UserAnswer]
+    
+# A model for the result of a single question
+class QuestionResult(BaseModel):
+    is_correct: bool
+    user_answer_index: int
+    correct_answer_index: int
+
+# The final response model for a quiz submission
+class QuizResult(BaseModel):
+    completed_at: datetime
+    final_score: float
+    correct_count: int
+    new_quiz_streak: int
+    results: List[QuestionResult]
+
+class PastResult(BaseModel):
+    completed_at: datetime
+    final_score: float
+    results: List[QuestionResult]
     
 class QuizForUser(BaseModel):
     quiz_id: str
     topic: str
     questions: List[QuestionForUser]
+    is_completed: bool = False
+    past_results: Optional[PastResult] = None

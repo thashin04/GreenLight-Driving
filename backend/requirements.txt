@@ -6,3 +6,5 @@ firebase_admin
 python-dotenv
 requests
 pydantic[email]
+google-generativeai
+apscheduler
