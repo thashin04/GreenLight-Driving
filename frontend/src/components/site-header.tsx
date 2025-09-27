@@ -28,34 +28,42 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 flex w-full items-center border-b bg-accent/20 shadow-md shadow-accent/30 backdrop-blur-sm">
-      <div className="flex h-[var(--header-height)] w-full items-center gap-5 px-6">
-        <Button className="w-6 h-6 cursor-pointer" variant="ghost" size="icon" onClick={toggleSidebar}>
-          <Menu className="size-5.5" />
-        </Button>
+  {/* restore the original gap */}
+  <div className="flex h-[var(--header-height)] w-full items-center gap-5 px-6">
+    <Button
+      className="w-6 h-6 cursor-pointer max-md:hidden"
+      variant="ghost"
+      size="icon"
+      onClick={toggleSidebar}
+    >
+      <Menu className="size-5.5" />
+    </Button>
 
-        <nav>
-          <Link to="/" className="text-lg">
-            GreenLight
-          </Link>
-        </nav>
+    <nav>
+      <Link to="/" className="text-lg font-bold text-midBlue dark:text-lightPurple">
+        GreenLight
+      </Link>
+    </nav>
 
-        <div className="flex gap-3 w-full sm:ml-auto sm:w-auto items-center">
-          <CircleQuestionMark className="size-8 text-darkBlue fill-lightPurple dark:text-lightPurple dark:fill-darkBlue/30 cursor-pointer" />
+    {/* ⬇️ push icons to the right at all widths */}
+    <div className="ml-auto flex items-center gap-3">
+      <CircleQuestionMark className="size-8 text-darkBlue fill-lightPurple dark:text-lightPurple dark:fill-darkBlue/30 cursor-pointer" />
 
-          <button
-            aria-label="Toggle dark mode"
-            className="inline-flex h-8 w-8 items-center justify-center rounded-md hover:opacity-80 focus-visible:outline-none"
-            onClick={() => setTheme(t => (t === "dark" ? "light" : "dark"))}
-            title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-          >
-            {theme === "dark" ? (
-              <Moon className="size-8 text-lightPurple fill-lightPurple" />
-            ) : (
-              <Sun className="size-8 text-midBlue fill-midBlue" />
-            )}
-          </button>
-        </div>
-      </div>
-    </header>
+      <button
+        aria-label="Toggle dark mode"
+        className="inline-flex h-8 w-8 items-center justify-center rounded-md hover:opacity-80 focus-visible:outline-none"
+        onClick={() => setTheme(t => (t === "dark" ? "light" : "dark"))}
+        title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+      >
+        {theme === "dark" ? (
+          <Moon className="size-8 text-lightPurple fill-lightPurple" />
+        ) : (
+          <Sun className="size-8 text-midBlue fill-midBlue" />
+        )}
+      </button>
+    </div>
+  </div>
+</header>
+
   );
 }

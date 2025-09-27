@@ -7,7 +7,7 @@ import { LayoutDashboard, Car, Notebook, Settings } from "lucide-react";
 
 const mobileRoutes = [
   { name: "Dashboard", url: "/", icon: LayoutDashboard },
-  { name: "Incident Logs", url: "/incidents", icon: Car },
+  { name: "Incidents", url: "/incidents", icon: Car },
   { name: "Quizzes", url: "/quizzes", icon: Notebook },
   { name: "Settings", url: "/settings", icon: Settings },
 ];
