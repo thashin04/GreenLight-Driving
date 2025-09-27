@@ -15,24 +15,24 @@ import {
 
 const data = {
   user: {
-    name: "Thasin",
+    name: "Thashin",
     message: "Keep up the great work!",
     avatar: "/avatars/shadcn.jpg",
   },
   projects: [
     {
       name: "Dashboard",
-      url: "#",
+      url: "/",
       icon: LayoutDashboard,
     },
     {
       name: "Incident Logs",
-      url: "#",
+      url: "/incidents",
       icon: Car,
     },
     {
       name: "Quizzes",
-      url: "#",
+      url: "/quizzes",
       icon: Notebook,
     },
   ],
