@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/sidebar"
 
 interface NavRoutesProps {
-  projects: {
+  pages: {
     name: string
     url: string
     icon: LucideIcon
@@ -38,7 +38,7 @@ interface NavRoutesProps {
 }
 
 export function NavRoutes({
-  projects,
+  pages,
   onFileSelect,
   maxSizeInMB = 30
 }: NavRoutesProps) {
@@ -201,7 +201,7 @@ export function NavRoutes({
       </Dialog>
       
       <SidebarMenu className="flex flex-col gap-2">
-        {projects.map((item) => (
+        {pages.map((item) => (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild className={`h-13 text-md flex gap-5 rounded-md px-3 py-2 transition-all ${
               currentPath === item.url 
