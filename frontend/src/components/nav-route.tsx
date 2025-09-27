@@ -31,7 +31,7 @@ export function NavRoutes({
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden flex flex-col gap-5">
-      <Button className="h-15 text-md flex gap-4 cursor-pointer hover:bg-gray-600">
+      <Button className="h-15 text-md flex gap-4 cursor-pointer bg-midBlue hover:bg-darkBlue dark:bg-lightPurple dark:hover:bg-lightPurple/90 font-bold">
         <Upload className="size-5"/>
         Upload Video
       </Button>
