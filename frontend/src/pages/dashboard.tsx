@@ -69,7 +69,7 @@ export default function DashboardPage() {
           <AppSidebar user={userStats}/>
           <MobileNav routes={mobileRoutes} />
           <SidebarInset>
-            <MainDashboard stats={userStats} className="min-h-[100vh] flex-1 rounded-xl md:min-h-min max-sm:m-4 m-12 mb-28 bg-white/30 dark:bg-darkBlue/50 dark:border-darkBlue/50 border-accent/40 border-1 backdrop-blur-3xl shadow-lg text-midBlue dark:text-lightPurple" />
+            <MainDashboard stats={userStats} className="min-h-[100vh] flex-1 rounded-xl md:min-h-min max-sm:m-4 m-12 lg:mx-22 mb-28 bg-white/30 dark:bg-darkBlue/50 dark:border-darkBlue/50 border-accent/40 border-1 backdrop-blur-3xl shadow-lg text-midBlue dark:text-lightPurple" />
           </SidebarInset>
         </div>
       </SidebarProvider>
