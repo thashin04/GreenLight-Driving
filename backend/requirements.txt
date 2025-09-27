@@ -2,3 +2,7 @@ fastapi
 uvicorn[standard]
 python-multipart
 opencv-python
+firebase_admin
+python-dotenv
+requests
+pydantic[email]
