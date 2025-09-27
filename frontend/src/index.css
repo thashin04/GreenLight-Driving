@@ -1,6 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 
+
+
+
+/* styles from shadcn ui */
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -115,6 +120,56 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
   }
+}
+
+/* end of shadcn styles */
+
+/* tailwind colors */
+@theme {
+  --font-display: "Manrope", sans-serif; 
+  /* Entire app colors (only for darkmode) */
+  --dark-page-main-bg: rgba(19, 25, 55, 1);
+  --dark-page-main-bg-opacity-70: rgba(19, 25, 55, 0.7);
+  --dark-page-main-bg-opacity-30: rgba(19, 25, 55, 0.3);
+  --dark-page-content-bg: rgba(19, 25, 55, 0.3);
+  --dark-page-cards-bg: rgba(70, 78, 103, 1);
+  
+  /* Text colors */
+  --dark-page-text: rgba(229, 231, 235, 1);
+  --dark-page-text-opacity-35: rgba(229, 231, 235, 0.35);
+  --dark-page-subtext: rgba(236, 239, 255, 1);
+  --dark-page-subtext-opacity-10: rgba(236, 239, 255, 0.1);
+  --dark-page-subtext-opacity-15: rgba(236, 239, 255, 0.15);
+
+  /* This is if the wavy background is not applied to the entire page and only to the dashboard, incidents, quizzes containers*/
+  --dark-page-gradient-bg-darkgray: rgba(30,30,30,1);
+  --dark-page-gradient-bg-darkblue: rgba(40,53, 75,1);
+
+  /* Table colors for incidents page */
+  --dark-table-header-bg: rgba(101, 123, 235, 0.17);
+  --dark-table-row-border: rgba(75, 85, 99, 100);
+  --dark-table-row-bg-opacity-6: rgba(255, 255, 255, 0.06);
+  --dark-table-row-bg-opacity-0: rgba(255, 255, 255, 0);
+
+  /*colors from figma*/
+  --color-darkBlue: #1A255A; 
+  --color-midBlue: #333B77;
+  --color-darkPurple: #6271DD;
+  --color-lightPurple: #E3E2F7; 
+}
+
+body{
+  font-family: 'Manrope', sans-serif;
+}
+
+:root {
+  --color-darkBlue: #1A255A; 
+  --color-lightPurple: #E3E2F7;
+}
+
+.dark {
+  --color-darkBlue: #131937!important;   /* midnightBlue */
+  --color-lightPurple: #E5E7EB!important;/* lightCream   */
 }

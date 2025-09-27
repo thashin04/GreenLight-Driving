@@ -38,10 +38,10 @@ export function NavRoutes({
       <SidebarMenu className="flex flex-col gap-2">
         {projects.map((item) => (
           <SidebarMenuItem key={item.name}>
-            <SidebarMenuButton asChild className={`h-13 text-md flex gap-5 rounded-md px-3 py-2 ${
+            <SidebarMenuButton asChild className={`h-13 text-md flex gap-5 rounded-md px-3 py-2 transition-all ${
               currentPath === item.url 
-                ? 'bg-gray-500 text-white hover:bg-gray-300' 
-                : 'hover:bg-gray-300'
+                ? 'bg-darkPurple/20 text-darkBLue backdrop-blur-3xl font-semibold border-1 border-darkPurple/20 dark:border-darkPurple/40 hover:bg-darkPurple/25' 
+                : 'hover:bg-gray-300/30 hover:dark:bg-darkPurple/20'
             }`}>
               <a href={item.url}>
                 <item.icon className="!w-5 !h-5"/>
