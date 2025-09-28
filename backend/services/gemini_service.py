@@ -117,8 +117,16 @@ def generate_dual_simulation_from_analysis(analysis_data: dict) -> dict:
     1.  One for the 'keyframes_actual'.
     2.  One for the 'keyframes_better_outcome'.
 
+    
+    **4. Technical Requirements for Simulation:**
+    * Generate a complete, self-contained HTML file with embedded JavaScript and Three.js.
+    * The scene should have a dark gray ground plane with white dashed lane lines (10 units wide per lane).
+    * Use a "chase camera" view, positioned behind and slightly above the `ego_vehicle`.
+    * The animation must smoothly interpolate between the keyframes provided in the table to create a fluid 15-second simulation of the event.
+    * Use simple BoxGeometry for the vehicles. Dimensions: Width=4, Height=3, Length=8.
     OUTPUT:
     Provide your output as a single, valid JSON object containing:
+    - do NOT include any text inside the three.js simulation. it will be shown in a iframe which needs to not be blocked with text or anything else.
     - "simulation_actual_html": The HTML/JS string for what actually happened.
     - "simulation_better_outcome_html": The HTML/JS string for the better outcome.
     - "quiz": The "better_action_quiz" object from the input data.
