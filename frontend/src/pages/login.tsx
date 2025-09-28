@@ -9,8 +9,8 @@ import { auth } from "@/firebase";
 
 function AuthShell({ title, subtitle, children }: { title: string; subtitle?: string; children: React.ReactNode }) {
   return (
-    <div className="min-h-[100vh] w-full flex items-center justify-center from-white to-pearl text-midBlue">
-      <div className="w-full max-w-md m-6 rounded-2xl bg-white/50 border-2 border-accent/40 backdrop-blur-3xl shadow-lg">
+    <div className="min-h-[100vh] w-full flex items-center justify-center from-white to-pearl text-midBlue dark:text-lightPurple">
+      <div className="w-full max-w-md m-6 rounded-2xl bg-white/50 dark:bg-darkBlue/50 border-1 border-accent/40 dark:border-darkPurple/40 backdrop-blur-3xl shadow-lg">
         <div className="px-8 pt-8">
           <h1 className="text-3xl font-extrabold text-center tracking-tight">
             {title}
@@ -92,7 +92,7 @@ export default function LoginPage() {
       <div className="grid gap-4">
         <Button
           variant="outline"
-          className="h-11 px-6 w-full flex items-center justify-center gap-2"
+          className="h-11 px-6 w-full flex items-center justify-center gap-2 hover:cursor-pointer"
           onClick={handleGoogleLogin}
         >
           <img
@@ -147,7 +147,7 @@ export default function LoginPage() {
               </button>
             </div>
           </label>
-          <Button type="submit" className="h-11 px-6 cursor-pointer">Sign in</Button>
+          <Button type="submit" className="h-11 px-6 cursor-pointer bg-midBlue hover:bg-darkBlue dark:bg-lightPurple dark:text-darkBlue font-bold dark:hover:bg-lightPurple/90">Sign in</Button>
           <p className="text-xs text-center opacity-80">
             Don't have an account? <Link to="/signup" className="font-bold underline">Register</Link>
           </p>
