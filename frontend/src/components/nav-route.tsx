@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 
 import {
   Upload,
@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/sidebar"
 
 interface NavRoutesProps {
-  projects: {
+  pages: {
     name: string
     url: string
     icon: LucideIcon
@@ -38,7 +38,7 @@ interface NavRoutesProps {
 }
 
 export function NavRoutes({
-  projects,
+  pages,
   onFileSelect,
   maxSizeInMB = 30
 }: NavRoutesProps) {
@@ -201,17 +201,17 @@ export function NavRoutes({
       </Dialog>
       
       <SidebarMenu className="flex flex-col gap-2">
-        {projects.map((item) => (
+        {pages.map((item) => (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild className={`h-13 text-md flex gap-5 rounded-md px-3 py-2 transition-all ${
               currentPath === item.url 
                 ? 'bg-darkPurple/20 text-darkBLue backdrop-blur-3xl font-semibold border-1 border-darkPurple/20 dark:border-darkPurple/40 hover:bg-darkPurple/25' 
                 : 'hover:bg-gray-300/30 hover:dark:bg-darkPurple/20'
             }`}>
-              <a href={item.url}>
+              <Link to={item.url}> 
                 <item.icon className="!w-5 !h-5"/>
                 <span>{item.name}</span>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         ))}
