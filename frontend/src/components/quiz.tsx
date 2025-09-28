@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { type LucideIcon, ChevronLeft, ChevronRight } from "lucide-react"; 
+import { type LucideIcon, ChevronLeft, ChevronRight, CheckCircle, XCircle } from "lucide-react"; 
 import { Button } from "@/components/ui/button"; 
 import {
   Dialog,
@@ -8,6 +8,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+
+// Helper function to calculate the score
+const calculateScore = (questions: QuizQuestion[], selectedAnswers: number[]): number => {
+    return selectedAnswers.reduce((acc, answer, index) => {
+        return answer === questions[index].correct_answer_index ? acc + 1 : acc;
+    }, 0);
+};
 
 interface QuizQuestion {
   id: number;
@@ -22,7 +29,7 @@ interface QuizCardProps {
   title: string;
   description: string;
   questionCount: string;
-  questions?: QuizQuestion[];
+  questions?: any[];
   is_completed: boolean;
 }
 
@@ -36,9 +43,15 @@ export function QuizCard({
   is_completed,
 }: QuizCardProps) {
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  // State to track user's answer selection for each question
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>(new Array(questions.length).fill(-1));
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [showResult, setShowResult] = useState(false);
+  // State to control instant feedback display after answering a question
+  const [showResult, setShowResult] = useState(false); 
+  // NEW: State to show the final score summary
+  const [isQuizCompleted, setIsQuizCompleted] = useState(false);
+  // NEW: State to store the final score
+  const [finalScore, setFinalScore] = useState(0); 
 
   const handleAnswerSelect = (optionIndex: number) => {
     const newAnswers = [...selectedAnswers];
@@ -50,7 +63,7 @@ export function QuizCard({
   const handleNext = () => {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
-      setShowResult(false);
+      setShowResult(selectedAnswers[currentQuestion + 1] !== -1);
     }
   };
 
@@ -65,6 +78,8 @@ export function QuizCard({
     setCurrentQuestion(0);
     setSelectedAnswers(new Array(questions.length).fill(-1));
     setShowResult(false);
+    setIsQuizCompleted(false); // Reset completion state
+    setFinalScore(0); // Reset score
     setIsDialogOpen(true);
   };
 
@@ -218,30 +233,31 @@ export function QuizCard({
                   Previous
                 </Button>
 
-                <div className="text-sm text-gray-600 dark:text-gray-400">
-                    <span>Question {currentQuestion + 1} of {questions.length}</span>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">
+                          <span>Question {currentQuestion + 1} of {questions.length}</span>
+                      </div>
+                      
+                      {isLastQuestion ? (
+                        <Button
+                          onClick={handleFinishQuiz}
+                          disabled={userAnswer === -1} // Must have answered the last question
+                          className="bg-green-600 hover:bg-green-700 text-white"
+                        >
+                          Finish Quiz
+                        </Button>
+                      ) : (
+                        <Button
+                          onClick={handleNext}
+                          disabled={userAnswer === -1} // Must answer the current question before moving
+                          className="flex items-center gap-2 bg-midBlue hover:bg-darkBlue dark:bg-lightPurple dark:hover:bg-lightPurple/90"
+                        >
+                          Next
+                          <ChevronRight className="w-4 h-4" />
+                        </Button>
+                      )}
+                    </div>
                 </div>
-                
-                {isLastQuestion ? (
-                  <Button
-                    onClick={handleFinishQuiz}
-                    disabled={!showResult}
-                    className="bg-green-600 hover:bg-green-700 text-white"
-                  >
-                    Finish Quiz
-                  </Button>
-                ) : (
-                  <Button
-                    onClick={handleNext}
-                    disabled={!showResult}
-                    className="flex items-center gap-2 bg-midBlue hover:bg-darkBlue dark:bg-lightPurple dark:hover:bg-lightPurple/90"
-                  >
-                    Next
-                    <ChevronRight className="w-4 h-4" />
-                  </Button>
-                )}
-              </div>
-            </div>
+            )
           </DialogContent>
         </Dialog>
       </div>

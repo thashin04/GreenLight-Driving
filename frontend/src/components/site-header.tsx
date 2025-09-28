@@ -52,7 +52,7 @@ export function SiteHeader() {
     </Button>
 
     <nav>
-      <Link to="/" className="text-lg font-bold text-midBlue dark:text-lightPurple">
+      <Link to="/dashboard" className="text-lg font-bold text-midBlue dark:text-lightPurple">
         GreenLight
       </Link>
     </nav>
