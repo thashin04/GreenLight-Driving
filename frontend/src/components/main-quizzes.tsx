@@ -104,12 +104,12 @@ function MainQuizzes({ className, ...props }: React.ComponentProps<"div">) {
         <div className="flex flex-col gap-6 h-7/8">
 
             {/* Score stats and Today's Daily Challenge and Recent Quizzes Container */}
-            <div className="flex flex-col xl:flex-row gap-6">
+            <div className="flex flex-col xl:flex-row gap-6 min-h-[40vh]">
 
                 {/* Score stats and Today's Daily Challenge Container */}
                 <div className="flex flex-col gap-6 w-full xl:w-2/3">
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        <div className="rounded-xl border-1 border-midBlue/40 dark:border-darkPurple/35 bg-white/30 dark:bg-darkBlue/50 backdrop-blur-3xl px-3 pt-3 pb-6">
+                    <div className="flex gap-3">
+                        <div className="flex-1 rounded-xl border-1 border-midBlue/40 dark:border-darkPurple/35 bg-white/30 dark:bg-darkBlue/50 backdrop-blur-3xl px-3 pt-3 pb-6">
                             <div className="flex justify-between">
                                 <p className="text-sm">Quizzes Taken</p>
                                 <ClipboardCheck className="w-5 h-5"/>
