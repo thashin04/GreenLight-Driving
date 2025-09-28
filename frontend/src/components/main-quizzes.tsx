@@ -116,14 +116,14 @@ function MainQuizzes({ className, ...props }: React.ComponentProps<"div">) {
                             </div>
                             <p className="text-xl font-bold">{stats.quizzesTaken}</p>
                         </div>
-                        <div className="rounded-xl border-1 border-midBlue/40 bg-white/30 dark:bg-darkBlue/50 backdrop-blur-3xl px-3 pt-3 pb-6">
+                        <div className="rounded-xl border-1 border-midBlue/40 dark:border-darkPurple/35 bg-white/30 dark:bg-darkBlue/50 backdrop-blur-3xl px-3 pt-3 pb-6">
                             <div className="flex justify-between">
                                 <p className="text-sm">Average Score</p>
                                 <ChartLine className="w-5 h-5"/>
                             </div>
                             <p className="text-xl font-bold">{stats.averageScore}%</p>
                         </div>
-                        <div className="rounded-xl border-1 border-midBlue/40 bg-white/30 dark:bg-darkBlue/50 backdrop-blur-3xl px-3 pt-3 pb-6">
+                        <div className="rounded-xl border-1 border-midBlue/40 dark:border-darkPurple/35 bg-white/30 dark:bg-darkBlue/50 backdrop-blur-3xl px-3 pt-3 pb-6">
                             <div className="flex justify-between">
                                 <p className="text-sm">Streak</p>
                                 <Flame className="w-5 h-5"/>
@@ -167,7 +167,7 @@ function MainQuizzes({ className, ...props }: React.ComponentProps<"div">) {
                                 <div key={quiz.quiz_id} className="flex items-center justify-between rounded-lg border border-midBlue/20 transition-all flex-1 min-h-[60px] h-[60px] px-5 py-3 bg-white/20 dark:bg-midBlue/40 hover:bg-darkPurple/5">
                                     <div className="flex items-center gap-3">
                                         <Hand className="w-6 h-6" /> 
-                                        <p className="text-md font-medium">{quiz.topic}</p>
+                                        <p className="text-md font-medium max-md:text-sm">{quiz.topic}</p>
                                     </div>
                                     <p>{Math.round(quiz.past_results?.final_score || 0)}%</p>
                                 </div>

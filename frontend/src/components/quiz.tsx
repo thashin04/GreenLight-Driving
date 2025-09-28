@@ -167,17 +167,17 @@ export function QuizCard({
   };
 
   return (
-    <div className="flex justify-between items-center px-5 py-3 rounded-lg border border-midBlue/20 bg-white/20 dark:bg-midBlue/40 min-h-[75px] flex-1 hover:bg-white/10 transition-all">
-      <div className="flex items-center gap-3">
+    <div className="flex justify-between items-center px-5 py-3 rounded-lg border border-midBlue/20 bg-white/20 dark:bg-midBlue/40 flex-1 hover:bg-white/10 transition-all">
+      <div className="flex items-center pr-2 gap-3">
         <Icon className="w-6 h-6" /> 
         <div className="flex pr-2 flex-col">
-          <p className="text-md font-medium">{title}</p>
-          <p className="text-xs">{description}</p>
+          <p className="text-md max-md:text-sm font-medium">{title}</p>
+          <p className="text-xs max-md:hidden">{description}</p>
         </div>
       </div>
       
       <div className="flex gap-3 items-center">
-        <p>{questionCount}</p>
+        <p className="max-md:hidden">{questionCount}</p>
         
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger

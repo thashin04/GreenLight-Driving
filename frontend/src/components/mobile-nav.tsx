@@ -12,7 +12,7 @@ export type BottomRoute = {
  * useLiveDash: prompts for camera and navigates to /live (or passed url) after permission.
  * Replace navigate target with whatever your dashcam route is.
  */
-function useLiveDash(target: string = "/live") {
+function useLiveDash(target: string = "/camera") {
   const navigate = useNavigate();
 
   const start = React.useCallback(async () => {
@@ -34,7 +34,7 @@ function useLiveDash(target: string = "/live") {
 
 export default function MobileNav({ routes }: { routes: BottomRoute[] }) {
   const { pathname } = useLocation();
-  const { start } = useLiveDash("/live");
+  const { start } = useLiveDash("/camera");
 
   return (
     <nav className="md:hidden fixed inset-x-0 bottom-0 z-50">

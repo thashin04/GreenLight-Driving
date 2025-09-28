@@ -303,7 +303,7 @@ export const IncidentReviewFlow = ({ incident }: { incident: Incident }) => {
             <DialogTrigger asChild>
                 <DropdownMenuItem 
                     onSelect={(e) => e.preventDefault()} // Prevent dropdown from closing
-                    className="hover:bg-gray-100 w-full cursor-pointer relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden"
+                    className="hover:bg-gray-100 w-full cursor-pointer relative flex items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden"
                 >
                     View incidents details
                 </DropdownMenuItem>
