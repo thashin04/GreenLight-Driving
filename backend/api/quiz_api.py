@@ -34,16 +34,11 @@ def create_quiz(
     new_quiz_ref.set(quiz_data)
     quiz_id = new_quiz_ref.id
 
-    # Prepare the quiz data to send to the user (without answers)
-    questions_for_user = [{
-        "question_text": q["question_text"],
-        "options": q["options"]
-    } for q in quiz_data["questions"]]
 
     return {
         "quiz_id": quiz_id,
         "topic": quiz_data["topic"],
-        "questions": questions_for_user
+        "questions": quiz_data["questions"] # Use the original, complete list
     }
 
 # Generates and overwrites the daily quiz in Firestore

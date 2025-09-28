@@ -30,8 +30,6 @@ def process_video_and_generate_simulations(video_url: str) -> dict:
 
     CRITICAL REQUIREMENTS FOR SIMULATIONS:
     1.  NO SYNTAX ERRORS: The generated code must be 100% complete and runnable.
-    2.  FOLLOW THE CAR: The camera must be a 'chase camera' positioned behind and slightly above the main vehicle.
-    3.  CONTROLS AND REPLAY: Add a 'Pause/Play' button. The animation must automatically loop.
     **4. Technical Requirements for Simulation:**
     - do NOT include any text inside the three.js simulation. it will be shown in a iframe which needs to not be blocked with text or anything else.
     * Generate a complete, self-contained HTML file with embedded JavaScript and Three.js.
