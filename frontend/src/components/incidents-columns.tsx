@@ -44,6 +44,7 @@ import {
 
 // --- TYPES ---
 export type Incident = {
+  key: string
   id: string
   severity: "low" | "medium" | "high"
   date: string
@@ -309,7 +310,38 @@ export const columns: ColumnDef<Incident>[] = [
   {
     id: "actions",
     cell: ({row}) => {
-      const incident = row.original;
+      // can use ({row}) => { instead to access the row's id. I removed it because I don't like seeing warnings about unused variables
+      const incident = row.original
+
+      const handleDelete = async () => {
+        const token = localStorage.getItem("accessToken");
+        if (!token) {
+          alert("Authentication error. Please log in again.");
+          return;
+        }
+
+        try {
+          const response = await fetch(`http://127.0.0.1:8000/incidents/delete/${incident.key}`, {
+            method: 'DELETE',
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.detail || "Failed to delete incident.");
+          }
+
+          // On success, show a confirmation and refresh the page to update the table
+          alert("Incident deleted successfully.");
+          window.location.reload();
+
+        } catch (error) {
+          console.error("Delete error:", error);
+          alert(error instanceof Error ? error.message : "An unknown error occurred.");
+        }
+      };
       
       return (
         <div className="flex flex-end">
@@ -340,7 +372,7 @@ export const columns: ColumnDef<Incident>[] = [
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction>Confirm</AlertDialogAction>
+                    <AlertDialogAction onClick={handleDelete}>Confirm</AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>

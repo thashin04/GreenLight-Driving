@@ -104,9 +104,7 @@ async def analyze_driving_video(
         if not simulation_package:
             raise HTTPException(status_code=500, detail="Failed to generate simulation")
         
-        incident_id = str(uuid.uuid4())
         new_incident = Incident(
-            incident_id=incident_id,
             user_id=uid,
             created_at=datetime.now(),
             
@@ -118,9 +116,12 @@ async def analyze_driving_video(
             simulation_html=simulation_package.get("simulation_actual_html"),
             simulation_better_html=simulation_package.get("simulation_better_outcome_html")
         )
+        data_to_store = new_incident.model_dump(mode='json')
+
+        incident_id_str = str(new_incident.incident_id)
         
         # Save the record to Firestore
-        db.collection('incidents').document(incident_id).set(new_incident.model_dump())
+        db.collection('incidents').document(incident_id_str).set(data_to_store)
         
         return new_incident
 

@@ -62,3 +62,32 @@ def update_incident(
     
     updated_doc = incident_ref.get()
     return Incident.model_validate(updated_doc.to_dict())
+
+@router.delete("/delete/{incident_id}", status_code=status.HTTP_200_OK)
+def delete_incident(
+    incident_id: UUID,
+    current_user: dict = Depends(get_current_user)
+):
+    uid = current_user.get("uid")
+    incident_ref = incidents_collection.document(str(incident_id))
+    
+    try:
+        # First, we must get the document to verify the owner
+        incident_doc = incident_ref.get()
+        if not incident_doc.exists:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Incident not found")
+
+        # Security Check: Ensure the incident belongs to the current user
+        if incident_doc.to_dict().get('user_id') != uid:
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to delete this incident")
+
+        # If the check passes, delete the document
+        incident_ref.delete()
+        
+        return {"message": "Incident deleted successfully"}
+        
+    except Exception as e:
+        # Re-raise HTTP exceptions, handle others
+        if isinstance(e, HTTPException):
+            raise e
+        raise HTTPException(status_code=500, detail=str(e))

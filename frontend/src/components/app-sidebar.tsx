@@ -23,7 +23,8 @@ import { useNavigate } from "react-router-dom"
 
 export function AppSidebar({ user, ...props }: any) {
   let userDataForNav = {
-    name: user?.first_name || "User",
+    name_first: user?.first_name || "User",
+    name_last: user?.last_name || "Last",
     score: user?.safety_score || 0,
     message: "Keep up the great work!",
     avatar: "/avatars/shadcn.jpg"
@@ -55,7 +56,8 @@ export function AppSidebar({ user, ...props }: any) {
       fetchUserData();
     }, [navigate]);
 
-  userDataForNav.name = userStats?.first_name || "User"
+  userDataForNav.name_first = userStats?.first_name || "User"
+  userDataForNav.name_last = userStats?.last_name || "Last"
   userDataForNav.score = userStats?.safety_score || 0
 
   return (
