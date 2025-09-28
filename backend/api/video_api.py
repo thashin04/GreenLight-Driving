@@ -92,10 +92,12 @@ async def analyze_driving_video(
     try:
         # Upload to Firebase Storage
         blob = bucket.blob(unique_filename)
+        await file.seek(0)
         blob.upload_from_file(file.file, content_type=file.content_type)
         blob.make_public()
         video_url = blob.public_url
         
+        # Agent/Gemini Analysis
         session_id = str(uuid.uuid4())
         agent_prompt = f"Process the driving incident from the video at {video_url} for user {uid}."
         
@@ -104,7 +106,6 @@ async def analyze_driving_video(
             user_id=uid,
             session_id=session_id
         )
-
         events = runner.run_async(
             user_id=uid,
             session_id=session_id,
@@ -114,21 +115,38 @@ async def analyze_driving_video(
         final_result = None
         async for event in events:
             if event.is_final_response():
-                # Access first part of the content
                 json_string = event.content.parts[0].text
-                
-                # Clean the string by removing the markdown ```json 
                 clean_json_string = json_string.strip().replace("```json", "").replace("```", "")
-                
-                # Parse the clean string into a Python dictionary
                 final_result = json.loads(clean_json_string)
-                
                 break
-
+        
         if final_result is None:
             raise Exception("Agent did not produce a final result.")
+        
+        # --- START OF FIX ---
 
-        return final_result
+        # 1. IMPORTANT: Safely remove any 'user_id' that the agent might have included.
+        #    We only trust the uid from the authentication token.
+        final_result.pop('user_id', None)
+        
+        # 2. Let the Pydantic model create its own default values for incident_id and created_at.
+        new_incident = Incident(
+            user_id=uid,
+            **final_result
+        )
+        
+        # 3. Use model_dump(mode='json') to create a Firestore-compatible dictionary.
+        data_to_store = new_incident.model_dump(mode='json')
+        
+        # 4. Get the string version of the ID for the document path.
+        incident_id_str = str(new_incident.incident_id)
+
+        # 5. Save the corrected dictionary to Firestore.
+        db.collection('incidents').document(incident_id_str).set(data_to_store)
+
+        # --- END OF FIX ---
+
+        return new_incident
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
