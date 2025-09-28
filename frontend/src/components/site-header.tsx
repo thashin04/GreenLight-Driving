@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Menu, CircleQuestionMark, Sun, Moon, LogOut } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useSidebar } from "@/components/ui/sidebar";
 
@@ -21,6 +21,7 @@ function getInitialTheme(): Theme {
 export function SiteHeader() {
   const { toggleSidebar } = useSidebar();
   const [theme, setTheme] = useState<Theme>(() => getInitialTheme());
+  const navigate = useNavigate();
 
   // apply theme to <html> and persist
   useEffect(() => {
@@ -31,6 +32,11 @@ export function SiteHeader() {
     (root as HTMLElement).style.colorScheme = theme;
     localStorage.setItem("theme", theme);
   }, [theme]);
+
+    const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    navigate("/login");
+  };
 
   return (
     <header className="sticky top-0 z-50 flex w-full items-center border-b bg-accent/20 shadow-md shadow-accent/30 backdrop-blur-sm">
@@ -82,7 +88,7 @@ export function SiteHeader() {
       </Tooltip>
       
       <Tooltip>
-        <TooltipTrigger>
+        <TooltipTrigger onClick={handleLogout}>
           <LogOut className="size-8 text-darkBlue fill-lightPurple dark:text-lightPurple dark:fill-darkBlue/30 cursor-pointer" />
         </TooltipTrigger>
         <TooltipContent>

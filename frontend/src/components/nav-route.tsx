@@ -80,11 +80,35 @@ export function NavRoutes({
     if (!selectedFile) return;
 
     setIsUploading(true);
+    setError("");
+
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      setError("You must be logged in to upload a video.");
+      setIsUploading(false);
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', selectedFile);
 
     try {
+      const response = await fetch("http://127.0.0.1:8000/video/analyze", {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'An unknown error occurred.');
+      }
+
+      const newIncident = await response.json();
+      console.log("Successfully created incident:", newIncident);
       
-      
-      // Reset state
       setSelectedFile(null);
       setIsDialogOpen(false);
       
