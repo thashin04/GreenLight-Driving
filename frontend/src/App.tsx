@@ -4,6 +4,7 @@ import IncidentsPage from "./pages/incidents"
 import QuizzesPage from "./pages/quizzes"
 import LoginPage from "./pages/login"
 import SignupPage from "./pages/signup"
+import CameraPage from "./pages/camera"
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
       <Route path="/dashboard" element={<DashboardPage />} />
       <Route path="/incidents" element={<IncidentsPage />} />
       <Route path="/quizzes" element={<QuizzesPage />} />
+      <Route path="/camera" element={<CameraPage />} />
     </Routes>
   )
 }
