@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
-import { Trophy, ChartNoAxesColumnIncreasing, MoveRight} from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Trophy, ChartNoAxesColumnIncreasing, MoveRight, CircleStar, Award, Medal, ArrowUpRight} from 'lucide-react';
 
 function MainDashboard({ className, ...props }: React.ComponentProps<"div">) {
     return (
@@ -18,10 +19,57 @@ function MainDashboard({ className, ...props }: React.ComponentProps<"div">) {
               <p className="text-xl font-bold max-sm:text-md">Recent Achievements</p>
             </div>
             <div className="flex flex-col flex-1 gap-2 py-3">
-              <div className="bg-darkPurple/15 rounded-lg border flex-1 cursor-pointer hover:bg-darkPurple/5 transition-all py-8"></div>
-              <div className="bg-darkPurple/15 rounded-lg border flex-1 cursor-pointer hover:bg-darkPurple/5 transition-all py-8"></div>
-              <div className="bg-darkPurple/15 rounded-lg border flex-1 cursor-pointer hover:bg-darkPurple/5 transition-all py-8"></div>
-              <div className="bg-darkPurple/15 rounded-lg border flex-1 cursor-pointer hover:bg-darkPurple/5 transition-all py-8"></div>
+    
+                {/* achievement 1 */}
+                <Link to="/quizzes" className="group relative flex items-start px-6 gap-4 bg-darkPurple/15 rounded-lg border flex-1 cursor-pointer hover:bg-darkPurple/5 transition-all py-4">
+                  <div className="flex items-start gap-4">
+                    <Award className="w-10 h-10"/>
+                    <div className="flex flex-col gap-1">
+                      <p className="text-xl font-semibold">Smooth Operator</p>
+                      <p className="text-sm">Maintain zero hard braking over many consecutive hours of driving</p>
+                    </div>
+                  </div>
+                  <ArrowUpRight 
+                    className="absolute top-4 right-4 w-6 h-6 text-gray-500 opacity-0 transition-opacity duration-300 group-hover:opacity-100" 
+                  />
+                </Link>
+
+                {/* achievement 2 */}
+                <Link to="/quizzes" className="group relative flex items-start px-6 gap-4 bg-darkPurple/15 rounded-lg border flex-1 cursor-pointer hover:bg-darkPurple/5 transition-all py-4">
+                  <div className="flex items-start gap-4">
+                    <CircleStar className="w-10 h-10"/>
+                    <div className="flex flex-col gap-1">
+                      <p className="text-xl font-semibold">Speed Limit Guard</p>
+                      <p className="text-sm">Log many hours of driving without exceeding the speed limit by more than 5 mph</p>
+                    </div>
+                  </div>
+                  <ArrowUpRight 
+                    className="absolute top-4 right-4 w-6 h-6 text-gray-500 opacity-0 transition-opacity duration-300 group-hover:opacity-100" 
+                  />
+                </Link>
+
+                {/* achievement 3 */}
+                <Link to="/quizzes" className="group relative flex items-start px-6 gap-4 bg-darkPurple/15 rounded-lg border flex-1 cursor-pointer hover:bg-darkPurple/5 transition-all py-4">
+                  <div className="flex items-start gap-4">
+                    <Medal className="w-10 h-10"/>
+                    <div className="flex flex-col gap-1">
+                      <p className="text-xl font-semibold">Consistent Pacer</p>
+                      <p className="text-sm">Complete a trip with no hard acceleration events</p>
+                    </div>
+                  </div>
+                  <ArrowUpRight 
+                    className="absolute top-4 right-4 w-6 h-6 text-gray-500 opacity-0 transition-opacity duration-300 group-hover:opacity-100" 
+                  />
+                </Link>
+                
+                {/* Empty Achievement */}
+                <Link to="/quizzes" className="group relative flex items-start px-6 gap-4 bg-darkPurple/15 rounded-lg border flex-1 cursor-pointer hover:bg-darkPurple/5 transition-all py-4">
+                  <p className="text-center">Keep up with safety driving practices and you will earn driving achievements!</p>
+                  <ArrowUpRight 
+                    className="absolute top-4 right-4 w-6 h-6 text-gray-500 opacity-0 transition-opacity duration-300 group-hover:opacity-100" 
+                  />
+                </Link>
+
             </div>
           </div>
   
