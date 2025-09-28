@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { type LucideIcon, ChevronLeft, ChevronRight } from "lucide-react"; 
+import { type LucideIcon, ChevronLeft, ChevronRight, CheckCircle, XCircle } from "lucide-react"; 
 import { Button } from "@/components/ui/button"; 
 import {
   Dialog,
@@ -8,6 +8,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+
+// Helper function to calculate the score
+const calculateScore = (questions: QuizQuestion[], selectedAnswers: number[]): number => {
+    return selectedAnswers.reduce((acc, answer, index) => {
+        return answer === questions[index].correctAnswer ? acc + 1 : acc;
+    }, 0);
+};
 
 interface QuizQuestion {
   id: number;
@@ -68,9 +75,15 @@ export function QuizCard({
   questions = sampleQuestions,
 }: QuizCardProps) {
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  // State to track user's answer selection for each question
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>(new Array(questions.length).fill(-1));
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [showResult, setShowResult] = useState(false);
+  // State to control instant feedback display after answering a question
+  const [showResult, setShowResult] = useState(false); 
+  // NEW: State to show the final score summary
+  const [isQuizCompleted, setIsQuizCompleted] = useState(false);
+  // NEW: State to store the final score
+  const [finalScore, setFinalScore] = useState(0); 
 
   const handleAnswerSelect = (optionIndex: number) => {
     const newAnswers = [...selectedAnswers];
@@ -82,7 +95,7 @@ export function QuizCard({
   const handleNext = () => {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
-      setShowResult(false);
+      setShowResult(selectedAnswers[currentQuestion + 1] !== -1);
     }
   };
 
@@ -98,17 +111,18 @@ export function QuizCard({
     setCurrentQuestion(0);
     setSelectedAnswers(new Array(questions.length).fill(-1));
     setShowResult(false);
+    setIsQuizCompleted(false); // Reset completion state
+    setFinalScore(0); // Reset score
     setIsDialogOpen(true);
   };
 
   const handleFinishQuiz = () => {
-    // Calculate score
-    const score = selectedAnswers.reduce((acc, answer, index) => {
-      return answer === questions[index].correctAnswer ? acc + 1 : acc;
-    }, 0);
+    // 1. Calculate the final score
+    const score = calculateScore(questions, selectedAnswers);
     
-    alert(`Quiz completed! Your score: ${score}/${questions.length}`);
-    setIsDialogOpen(false);
+    // 2. Store the score and transition to the results view
+    setFinalScore(score);
+    setIsQuizCompleted(true);
   };
 
   const currentQuestionData = questions[currentQuestion];
@@ -116,6 +130,45 @@ export function QuizCard({
   const isFirstQuestion = currentQuestion === 0;
   const userAnswer = selectedAnswers[currentQuestion];
   const correctAnswer = currentQuestionData.correctAnswer;
+  
+  // Component to render the final results summary
+  const ResultSummary = () => {
+      const scorePercentage = ((finalScore / questions.length) * 100).toFixed(0);
+      const isPassed = finalScore >= questions.length * 0.8; // Example: 80% passing grade
+
+      return (
+          <div className="p-8 space-y-8 flex flex-col items-center justify-center">
+              <div className={`p-6 rounded-full ${isPassed ? 'bg-green-100 dark:bg-green-900/40' : 'bg-red-100 dark:bg-red-900/40'}`}>
+                  {isPassed 
+                    ? <CheckCircle className="w-16 h-16 text-green-600 dark:text-green-400" />
+                    : <XCircle className="w-16 h-16 text-red-600 dark:text-red-400" />
+                  }
+              </div>
+              
+              <h2 className="text-3xl font-bold text-center">
+                  {isPassed ? "Congratulations!" : "Keep Practicing!"}
+              </h2>
+              
+              <div className="flex flex-col items-center space-y-2">
+                  <p className="text-5xl font-extrabold">
+                      {finalScore} / {questions.length}
+                  </p>
+                  <p className="text-lg text-gray-600 dark:text-gray-400">
+                      Your Score: <span className="font-bold">{scorePercentage}%</span>
+                  </p>
+              </div>
+
+              <Button 
+                  onClick={() => setIsDialogOpen(false)} 
+                  className="mt-6 w-full bg-midBlue hover:bg-darkBlue dark:bg-lightPurple dark:hover:bg-lightPurple/90"
+              >
+                  Close
+              </Button>
+          </div>
+      );
+  };
+
+  // --- Main Render ---
 
   return (
     <div className="flex justify-between items-center px-5 py-3 rounded-lg border border-midBlue/20 bg-white/20 dark:bg-midBlue/40 min-h-[75px] flex-1 hover:bg-white/10 transition-all">
@@ -142,105 +195,114 @@ export function QuizCard({
               <DialogTitle className="p-3 text-center text-xl border-b border-gray-200">{title} Quiz</DialogTitle>
             </DialogHeader>
             
-            <div className="space-y-6 px-6 pb-6">
-              {/* Question */}
-              <div className="space-y-4">
-                <h3 className="text-md font-medium leading-relaxed">
-                  Q{currentQuestion + 1}: {currentQuestionData.question}
-                </h3>
-                
-                {/* Answer Options */}
-                <div className="space-y-3">
-                  {currentQuestionData.options.map((option, index) => {
-                    let buttonStyle = '';
+            {/* Conditional Rendering: Show Results or Quiz Content */}
+            {isQuizCompleted ? (
+                <ResultSummary />
+            ) : (
+                <div className="space-y-6 px-6 pb-6">
+                    {/* Question */}
+                    <div className="space-y-4">
+                      <h3 className="text-md font-medium leading-relaxed">
+                        Q{currentQuestion + 1}: {currentQuestionData.question}
+                      </h3>
+                      
+                      {/* Answer Options */}
+                      <div className="space-y-3">
+                        {currentQuestionData.options.map((option, index) => {
+                          let buttonStyle = '';
+                          
+                          if (showResult) {
+                            // Style for correct answer
+                            if (index === correctAnswer) {
+                              buttonStyle = 'bg-green-100 border-green-500 text-green-700 dark:bg-green-900/20 dark:border-green-400 dark:text-green-300';
+                            // Style for incorrect answer selected by user
+                            } else if (index === userAnswer && index !== correctAnswer) {
+                              buttonStyle = 'bg-red-100 border-red-500 text-red-700 dark:bg-red-900/20 dark:border-red-400 dark:text-red-300';
+                            } else {
+                              buttonStyle = 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700';
+                            }
+                          } else if (userAnswer === index) {
+                            // Style for selected answer before result reveal
+                            buttonStyle = 'bg-midBlue/20 border-midBlue text-midBlue dark:bg-lightPurple/20 dark:border-lightPurple dark:text-lightPurple font-medium';
+                          } else {
+                            // Default style
+                            buttonStyle = 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700';
+                          }
+
+                          return (
+                            <button
+                              key={index}
+                              onClick={() => !showResult && handleAnswerSelect(index)}
+                              disabled={userAnswer !== -1} // Disable all options once an answer is selected
+                              className={`w-full text-left p-4 rounded-lg border transition-all ${buttonStyle}`}
+                            >
+                              <div className="flex items-center gap-3">
+                                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                                  showResult
+                                    ? index === correctAnswer
+                                      ? 'border-green-500 dark:border-green-400'
+                                      : index === userAnswer && index !== correctAnswer
+                                      ? 'border-red-500 dark:border-red-400'
+                                      : 'border-gray-300 dark:border-gray-600'
+                                    : userAnswer === index
+                                    ? 'border-midBlue dark:border-lightPurple'
+                                    : 'border-gray-300 dark:border-gray-600'
+                                }`}>
+                                  {((showResult && index === correctAnswer) || (!showResult && userAnswer === index)) && (
+                                    <div className={`w-2.5 h-2.5 rounded-full ${
+                                      showResult && index === correctAnswer
+                                        ? 'bg-green-500 dark:bg-green-400'
+                                        : showResult && index === userAnswer && index !== correctAnswer
+                                        ? 'bg-red-500 dark:bg-red-400'
+                                        : 'bg-midBlue dark:bg-lightPurple'
+                                    }`}></div>
+                                  )}
+                                </div>
+                                <span className="text-sm">{option}</span>
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
                     
-                    if (showResult) {
-                      if (index === correctAnswer) {
-                        buttonStyle = 'bg-green-100 border-green-500 text-green-700 dark:bg-green-900/20 dark:border-green-400 dark:text-green-300';
-                      } else if (index === userAnswer && index !== correctAnswer) {
-                        buttonStyle = 'bg-red-100 border-red-500 text-red-700 dark:bg-red-900/20 dark:border-red-400 dark:text-red-300';
-                      } else {
-                        buttonStyle = 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700';
-                      }
-                    } else if (userAnswer === index) {
-                      buttonStyle = 'bg-midBlue/20 border-midBlue text-midBlue dark:bg-lightPurple/20 dark:border-lightPurple dark:text-lightPurple font-medium';
-                    } else {
-                      buttonStyle = 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700';
-                    }
-
-                    return (
-                      <button
-                        key={index}
-                        onClick={() => !showResult && handleAnswerSelect(index)}
-                        disabled={showResult}
-                        className={`w-full text-left p-4 rounded-lg border transition-all ${buttonStyle}`}
+                    {/* Navigation Buttons */}
+                    <div className="flex justify-between items-center pt-4">
+                      <Button
+                        onClick={handlePrevious}
+                        disabled={isFirstQuestion}
+                        variant="outline"
+                        className="flex items-center gap-2"
                       >
-                        <div className="flex items-center gap-3">
-                          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                            showResult
-                              ? index === correctAnswer
-                                ? 'border-green-500 dark:border-green-400'
-                                : index === userAnswer && index !== correctAnswer
-                                ? 'border-red-500 dark:border-red-400'
-                                : 'border-gray-300 dark:border-gray-600'
-                              : userAnswer === index
-                              ? 'border-midBlue dark:border-lightPurple'
-                              : 'border-gray-300 dark:border-gray-600'
-                          }`}>
-                            {((showResult && index === correctAnswer) || (!showResult && userAnswer === index)) && (
-                              <div className={`w-2.5 h-2.5 rounded-full ${
-                                showResult && index === correctAnswer
-                                  ? 'bg-green-500 dark:bg-green-400'
-                                  : showResult && index === userAnswer && index !== correctAnswer
-                                  ? 'bg-red-500 dark:bg-red-400'
-                                  : 'bg-midBlue dark:bg-lightPurple'
-                              }`}></div>
-                            )}
-                          </div>
-                          <span className="text-sm">{option}</span>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-              
-              {/* Navigation Buttons */}
-              <div className="flex justify-between items-center pt-4">
-                <Button
-                  onClick={handlePrevious}
-                  disabled={isFirstQuestion}
-                  variant="outline"
-                  className="flex items-center gap-2"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                  Previous
-                </Button>
+                        <ChevronLeft className="w-4 h-4" />
+                        Previous
+                      </Button>
 
-                <div className="text-sm text-gray-600 dark:text-gray-400">
-                    <span>Question {currentQuestion + 1} of {questions.length}</span>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">
+                          <span>Question {currentQuestion + 1} of {questions.length}</span>
+                      </div>
+                      
+                      {isLastQuestion ? (
+                        <Button
+                          onClick={handleFinishQuiz}
+                          disabled={userAnswer === -1} // Must have answered the last question
+                          className="bg-green-600 hover:bg-green-700 text-white"
+                        >
+                          Finish Quiz
+                        </Button>
+                      ) : (
+                        <Button
+                          onClick={handleNext}
+                          disabled={userAnswer === -1} // Must answer the current question before moving
+                          className="flex items-center gap-2 bg-midBlue hover:bg-darkBlue dark:bg-lightPurple dark:hover:bg-lightPurple/90"
+                        >
+                          Next
+                          <ChevronRight className="w-4 h-4" />
+                        </Button>
+                      )}
+                    </div>
                 </div>
-                
-                {isLastQuestion ? (
-                  <Button
-                    onClick={handleFinishQuiz}
-                    disabled={!showResult}
-                    className="bg-green-600 hover:bg-green-700 text-white"
-                  >
-                    Finish Quiz
-                  </Button>
-                ) : (
-                  <Button
-                    onClick={handleNext}
-                    disabled={!showResult}
-                    className="flex items-center gap-2 bg-midBlue hover:bg-darkBlue dark:bg-lightPurple dark:hover:bg-lightPurple/90"
-                  >
-                    Next
-                    <ChevronRight className="w-4 h-4" />
-                  </Button>
-                )}
-              </div>
-            </div>
+            )}
           </DialogContent>
         </Dialog>
       </div>

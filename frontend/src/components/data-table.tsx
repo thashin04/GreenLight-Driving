@@ -131,11 +131,7 @@ export function DataTable<TData, TValue>({
                     </TableBody>
                 </Table>
             </div>
-            <div className="flex justify-between items-center">
-                <div className="text-muted-foreground flex-1 text-sm">
-                    {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                    {table.getFilteredRowModel().rows.length} row(s) selected.
-                </div>
+            <div className="flex justify-end items-center">
                 <div className="flex items-center justify-end space-x-2 py-4">
                     <Button
                         variant="outline"
