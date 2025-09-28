@@ -3,6 +3,10 @@ import { Link } from "react-router-dom";
 import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useNavigate } from "react-router-dom";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "@/firebase";
+
 
 function AuthShellRegister({ title, subtitle, children }: { title: string; subtitle?: string; children: React.ReactNode }) {
   return (
@@ -28,6 +32,71 @@ export default function SignupPage() {
   const [confirmPassword, setConfirmPassword] = React.useState("");
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirm, setShowConfirm] = React.useState(false);
+  const [error, setError] = React.useState("");
+  const navigate = useNavigate();
+
+  const handleGoogleLogin = async () => {
+      const provider = new GoogleAuthProvider();
+      try {
+        const result = await signInWithPopup(auth, provider);
+        
+        const idToken = await result.user.getIdToken();
+  
+        const response = await fetch("http://127.0.0.1:8000/auth/google/login", {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: idToken }),
+        });
+  
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.detail || "Google login failed.");
+        }
+  
+        localStorage.setItem("accessToken", data.access_token);
+        navigate("/dashboard");
+  
+      } catch (err: any) {
+        setError(err.message);
+      }
+    };
+
+
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://127.0.0.1:8000/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          first_name: firstName,
+          last_name: lastName,
+          email: email,
+          password: password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.detail || "Failed to create account.");
+      }
+      
+      navigate("/login");
+
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
 
   return (
     <AuthShellRegister title="Join us on Green Light" subtitle="Create your account!">
@@ -35,7 +104,7 @@ export default function SignupPage() {
         <Button
           variant="outline"
           className="h-11 px-6 w-full flex items-center justify-center gap-2"
-          onClick={() => console.log("Signup with Google clicked")}
+          onClick={handleGoogleLogin}
         >
           <img
             src="https://www.svgrepo.com/show/475656/google-color.svg"
@@ -51,7 +120,8 @@ export default function SignupPage() {
           <div className="flex-grow border-b"></div>
         </div>
 
-        <form onSubmit={(e) => e.preventDefault()} className="grid gap-4">
+        <form onSubmit={handleSignup} className="grid gap-4">
+          {error && <p className="text-xs text-center text-red-600">{error}</p>}
           <div className="grid grid-cols-2 gap-3">
             <label className="grid gap-2 text-sm">
               <span className="font-medium">First name</span>
@@ -142,7 +212,7 @@ export default function SignupPage() {
             </div>
           </label>
 
-          <Button type="submit" className="h-11 px-6">Register</Button>
+          <Button type="submit" className="h-11 px-6 cursor-pointer">Register</Button>
           <p className="text-xs text-center opacity-80">
           Already have an account? <Link to="/login" className="font-bold underline">Login </Link>
           </p>

@@ -2,7 +2,7 @@
 
 import { type ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal, ArrowUpDown } from "lucide-react"
-import { Checkbox } from "@/components/ui/checkbox"
+// import { Checkbox } from "@/components/ui/checkbox"
 
 import {
   AlertDialog,
@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 export type Incident = {
+  key: string
   id: string
   type: "good" | "bad" | "worse"
   severity: "low" | "medium" | "high"
@@ -36,64 +37,13 @@ export type Incident = {
 
 export const columns: ColumnDef<Incident>[] = [
   {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
     accessorKey: "id",
     header: () => <div className="">ID</div>,
     cell: ({ row }) => <div className="">{row.getValue("id")}</div>
   },
   {
     accessorKey: "type",
-    header: ({ column }) => {
-      const handleTypeSort = () => {
-        const currentFilter = column.getFilterValue() as string;
-        
-        if (!currentFilter) {
-          // First click: show only "good"
-          column.setFilterValue("good");
-        } else if (currentFilter === "good") {
-          // Second click: show only "bad"
-          column.setFilterValue("bad");
-        } else if (currentFilter === "bad") {
-          // Third click: show only "worse"
-          column.setFilterValue("worse");
-        } else {
-          // Fourth click: clear filter (show all)
-          column.setFilterValue("");
-        }
-      };
-
-      return (
-        <Button
-          variant="ghost"
-          onClick={handleTypeSort}
-          className="!px-0"
-        >
-          Type
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
+    header: () => <div className="">Type</div>,
     cell: ({ row }) => <div className="">{row.getValue("type")}</div>
   },
   {
@@ -103,16 +53,13 @@ export const columns: ColumnDef<Incident>[] = [
         const currentFilter = column.getFilterValue() as string;
         
         if (!currentFilter) {
-          // First click: show only "good"
+          // First click: show only "low"
           column.setFilterValue("low");
         } else if (currentFilter === "low") {
-          // Second click: show only "bad"
-          column.setFilterValue("medium");
-        } else if (currentFilter === "medium") {
-          // Third click: show only "worse"
+          // Second click: skip 'medium' and show only "high"
           column.setFilterValue("high");
-        } else {
-          // Fourth click: clear filter (show all)
+        } else if (currentFilter === "high") {
+          // Third click: clear filter (show all)
           column.setFilterValue("");
         }
       };
@@ -142,9 +89,39 @@ export const columns: ColumnDef<Incident>[] = [
   },
   {
     id: "actions",
-    cell: () => {
+    cell: ({row}) => {
       // can use ({row}) => { instead to access the row's id. I removed it because I don't like seeing warnings about unused variables
-      // const incident = row.original
+      const incident = row.original
+
+      const handleDelete = async () => {
+        const token = localStorage.getItem("accessToken");
+        if (!token) {
+          alert("Authentication error. Please log in again.");
+          return;
+        }
+
+        try {
+          const response = await fetch(`http://127.0.0.1:8000/incidents/delete/${incident.key}`, {
+            method: 'DELETE',
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.detail || "Failed to delete incident.");
+          }
+
+          // On success, show a confirmation and refresh the page to update the table
+          alert("Incident deleted successfully.");
+          window.location.reload();
+
+        } catch (error) {
+          console.error("Delete error:", error);
+          alert(error instanceof Error ? error.message : "An unknown error occurred.");
+        }
+      };
       
       return (
         <div className="flex flex-end">
@@ -172,7 +149,7 @@ export const columns: ColumnDef<Incident>[] = [
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction>Confirm</AlertDialogAction>
+                    <AlertDialogAction onClick={handleDelete}>Confirm</AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>

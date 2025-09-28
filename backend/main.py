@@ -3,6 +3,7 @@ from api import video_api, firebase_auth, incidents_api, user_api, achievements_
 from apscheduler.schedulers.background import BackgroundScheduler
 from api.quiz_api import update_daily_quiz
 from contextlib import asynccontextmanager
+from fastapi.middleware.cors import CORSMiddleware
 
 # Schedule update_daily_quiz to run every day at midnight (00:00) server time
 scheduler = BackgroundScheduler()
@@ -25,9 +26,21 @@ app = FastAPI(
     lifespan=lifespan
 )
 
+origins = [
+    "http://localhost:5173",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.include_router(video_api.router, prefix="/video", tags=["Video Processing"])
 app.include_router(firebase_auth.router, prefix="/auth", tags=["Authentication"])
-# app.include_router(incidents_api.router, prefix="/incidents", tags=["Incidents"])
+app.include_router(incidents_api.router, prefix="/incidents", tags=["Incidents"])
 app.include_router(user_api.router, prefix="/users", tags=["Users"])
 app.include_router(achievements_api.router, prefix="/achievements", tags=["Achievements"])
 app.include_router(quiz_api.router, prefix="/quiz", tags=["Quizzes"])
