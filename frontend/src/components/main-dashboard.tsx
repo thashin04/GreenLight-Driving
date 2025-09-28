@@ -4,7 +4,7 @@ import { Trophy, ChartNoAxesColumnIncreasing, MoveRight} from 'lucide-react';
 function MainDashboard({ className, ...props }: React.ComponentProps<"div">) {
     return (
       <div className={cn("flex flex-col gap-6 max-sm:p-4 p-8", className)} {...props}>
-        <div className="flex flex-col gap-3 min-h-[80px] h-1/8">
+        <div className="flex flex-col gap-3 min-h-[80px]">
           <h1 className="text-4xl max-sm:text-3xl font-extrabold">Dashboard</h1>
           <p>Here's how your driving has improved recently</p>
         </div>

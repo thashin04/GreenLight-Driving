@@ -1,8 +1,14 @@
 import { useEffect, useState } from "react";
-import { Menu, CircleQuestionMark, Sun, Moon } from "lucide-react";
+import { Menu, CircleQuestionMark, Sun, Moon, LogOut } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useSidebar } from "@/components/ui/sidebar";
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 type Theme = "light" | "dark";
 
@@ -47,20 +53,43 @@ export function SiteHeader() {
 
     {/* ⬇️ push icons to the right at all widths */}
     <div className="ml-auto flex items-center gap-3">
-      <CircleQuestionMark className="size-8 text-darkBlue fill-lightPurple dark:text-lightPurple dark:fill-darkBlue/30 cursor-pointer" />
+      
+      <Tooltip>
+        <TooltipTrigger>
+          <CircleQuestionMark className="size-8 text-darkBlue fill-lightPurple dark:text-lightPurple dark:fill-darkBlue/30 cursor-pointer" />
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>Help</p>
+        </TooltipContent>
+      </Tooltip>
 
-      <button
-        aria-label="Toggle dark mode"
-        className="inline-flex h-8 w-8 items-center justify-center rounded-md hover:opacity-80 focus-visible:outline-none"
-        onClick={() => setTheme(t => (t === "dark" ? "light" : "dark"))}
-        title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-      >
-        {theme === "dark" ? (
-          <Moon className="size-8 text-lightPurple fill-lightPurple" />
-        ) : (
-          <Sun className="size-8 text-midBlue fill-midBlue" />
-        )}
-      </button>
+      <Tooltip>
+        <TooltipTrigger
+            aria-label="Toggle dark mode"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-md hover:opacity-80 focus-visible:outline-none cursor-pointer"
+            onClick={() => setTheme(t => (t === "dark" ? "light" : "dark"))}
+            title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+          >
+            {theme === "dark" ? (
+              <Moon className="size-8 text-lightPurple fill-lightPurple" />
+            ) : (
+              <Sun className="size-8 text-midBlue fill-midBlue" />
+            )}
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>Light/Dark</p>
+        </TooltipContent>
+      </Tooltip>
+      
+      <Tooltip>
+        <TooltipTrigger>
+          <LogOut className="size-8 text-darkBlue fill-lightPurple dark:text-lightPurple dark:fill-darkBlue/30 cursor-pointer" />
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>Logout</p>
+        </TooltipContent>
+      </Tooltip>
+      
     </div>
   </div>
 </header>

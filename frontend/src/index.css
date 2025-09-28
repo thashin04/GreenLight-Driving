@@ -173,3 +173,10 @@ body{
   --color-darkBlue: #131937!important;   /* midnightBlue */
   --color-lightPurple: #E5E7EB!important;/* lightCream   */
 }
+
+@media (min-width: 1600px) {
+  body {
+    max-width: 1600px;
+    margin: auto;
+  }
+}
