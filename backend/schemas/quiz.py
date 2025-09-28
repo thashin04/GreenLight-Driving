@@ -23,6 +23,7 @@ class QuizInDB(BaseModel):
 class QuestionForUser(BaseModel):
     question_text: str
     options: List[str]
+    correct_answer_index: int
 
 # Model for user's submission
 class UserAnswer(BaseModel):
