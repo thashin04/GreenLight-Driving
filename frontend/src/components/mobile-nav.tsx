@@ -12,25 +12,15 @@ export type BottomRoute = {
  * useLiveDash: prompts for camera and navigates to /live (or passed url) after permission.
  * Replace navigate target with whatever your dashcam route is.
  */
-function useLiveDash(target: string = "/camera") {
+function useLiveDash(target: string = "/camera?auto=1") {
   const navigate = useNavigate();
-
-  const start = React.useCallback(async () => {
-    try {
-      // Ask for camera (rear camera if available)
-      await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: { ideal: "environment" } },
-        audio: false,
-      });
-      navigate(target);
-    } catch (err) {
-      console.error("Camera permission error", err);
-      navigate(target + "?cameraDenied=1");
-    }
+  const start = React.useCallback(() => {
+    navigate(target); // no getUserMedia here
   }, [navigate, target]);
-
   return { start };
 }
+
+
 
 export default function MobileNav({ routes }: { routes: BottomRoute[] }) {
   const { pathname } = useLocation();
