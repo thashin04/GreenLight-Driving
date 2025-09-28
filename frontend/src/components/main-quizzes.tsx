@@ -25,10 +25,10 @@ function MainQuizzes({ className, ...props }: React.ComponentProps<"div">) {
         <div className="flex flex-col gap-6 h-7/8">
 
             {/* Score stats and Today's Daily Challenge and Recent Quizzes Container */}
-            <div className="flex gap-6 min-h-[40vh]">
+            <div className="flex flex-col xl:flex-row gap-6 min-h-[40vh]">
 
                 {/* Score stats and Today's Daily Challenge Container */}
-                <div className="flex flex-col gap-6 w-2/3">
+                <div className="flex flex-col gap-6 w-full xl:w-2/3">
                     <div className="flex gap-3">
                         <div className="flex-1 rounded-xl border-1 border-midBlue/40 dark:border-darkPurple/35 bg-white/30 dark:bg-darkBlue/50 backdrop-blur-3xl px-3 pt-3 pb-6">
                             <div className="flex justify-between">
@@ -73,7 +73,7 @@ function MainQuizzes({ className, ...props }: React.ComponentProps<"div">) {
                 </div>
 
                 {/* Recent Quizzes Container */}
-                <div className="flex flex-col gap-3 w-1/3 rounded-lg border-1 border-midBlue/40 dark:border-darkPurple/35 bg-white/30 dark:bg-darkBlue/50 backdrop-blur-3xl px-3 py-5">
+                <div className="flex flex-col gap-3 w-full xl:w-1/3 rounded-lg border-1 border-midBlue/40 dark:border-darkPurple/35 bg-white/30 dark:bg-darkBlue/50 backdrop-blur-3xl px-3 py-5">
                     <h1 className="text-xl font-medium">Recent Quizzes</h1>
                     <div className="flex flex-col flex-1 gap-3 justify-center">
                         <div className="flex items-center justify-between rounded-lg border border-midBlue/20 transition-all flex-1 min-h-[60px] h-[60px] px-5 py-3 bg-white/20 dark:bg-midBlue/40 hover:bg-darkPurple/5">
