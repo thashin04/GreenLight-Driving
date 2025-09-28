@@ -189,8 +189,8 @@ export const IncidentReviewFlow = ({ incident }: { incident: Incident }) => {
                 return <ResultSummary />;
             case 'explanation':
                 return (
-                      <div className='flex flex-col gap-3 px-6'>
-                          <div className="aspect-video bg-black rounded-lg">
+                      <div className='flex flex-col gap-3 px-6 dark:bg-darkBlue bg-lightPurple text-darkBlue dark:text-lightPurple'>
+                          <div className="aspect-video rounded-lg">
                               <iframe
                                   title="Incident Simulation"
                                   srcDoc={incidentData.simulation_better_html}
@@ -198,7 +198,7 @@ export const IncidentReviewFlow = ({ incident }: { incident: Incident }) => {
                                   style={{ border: 'none' }} // Optional: remove default iframe border
                               />
                           </div>
-                          <p className="text-md font-semibold pt-2">Summary:</p>
+                          <p className="text-md font-semibold pt-2 ">Summary:</p>
                           <DialogDescription>{incidentData.quiz.explanation}</DialogDescription>
                       </div>
                 );
@@ -206,11 +206,11 @@ export const IncidentReviewFlow = ({ incident }: { incident: Incident }) => {
             default:
                 return (
                     <div className='flex flex-col gap-3 px-6'>
-                        <div className="aspect-video bg-black rounded-lg">
+                        <div className="aspect-video dark:!bg-darkBlue !bg-lightPurple !text-darkBlue dark:!text-lightPurple rounded-lg">
                             <iframe
                                 title="Incident Simulation"
                                 srcDoc={incidentData.simulation_html}
-                                className="w-full h-full rounded-lg"
+                                className="w-full h-full rounded-lg dark:!bg-darkBlue !bg-lightPurple !text-darkBlue dark:!text-lightPurple"
                                 style={{ border: 'none' }} // Optional: remove default iframe border
                             />
                         </div>
@@ -303,14 +303,14 @@ export const IncidentReviewFlow = ({ incident }: { incident: Incident }) => {
             <DialogTrigger asChild>
                 <DropdownMenuItem 
                     onSelect={(e) => e.preventDefault()} // Prevent dropdown from closing
-                    className="hover:bg-gray-100 w-full cursor-pointer relative flex items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden"
+                    className="dark:hover:bg-midBlue/30 hover:bg-gray-100 w-full cursor-pointer relative flex items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden"
                 >
                     View incidents details
                 </DropdownMenuItem>
             </DialogTrigger>
             <DialogContent className="max-w-lg">
                 <DialogHeader>
-                    <DialogTitle className="text-xl border-b w-full px-6 py-4">{`Review Incident: ${incident.id.substring(0, 8)}`}</DialogTitle>
+                    <DialogTitle className="text-xl border-b w-full px-6 py-4 dark:bg-darkBlue bg-lightPurple text-darkBlue dark:text-lightPurple">{`Review Incident: ${incident.id.substring(0, 8)}`}</DialogTitle>
                     {currentStep !== 'summary' && content}
                 </DialogHeader>
 
@@ -319,7 +319,7 @@ export const IncidentReviewFlow = ({ incident }: { incident: Incident }) => {
 
                 {/* Navigation Buttons */}
                 {currentStep !== 'summary' && (
-                    <div className="flex justify-between px-6 pt-6 pb-3 border-t border-gray-200">
+                    <div className="flex justify-between px-6 pt-6 pb-3">
                         {/* Previous Button - Only visible after 'details' step */}
                         <Button
                             onClick={handlePrevious}
@@ -336,7 +336,7 @@ export const IncidentReviewFlow = ({ incident }: { incident: Incident }) => {
                         <Button
                             onClick={handleNext}
                             disabled={currentStep === 'quiz' && !isAnswerSubmitted && selectedAnswerIndex === null}
-                            className={`flex items-center gap-1 w-2/5 justify-center 
+                            className={`flex items-center gap-1 w-2/5 justify-center dark:bg-lightPurple dark:text-darkBlue bg-darkBlue text-lightPurple border-0
                                         ${currentStep === 'quiz' && !isAnswerSubmitted ? 'bg-midBlue hover:bg-darkBlue' : 'bg-midBlue hover:bg-darkBlue'}
                                         dark:bg-lightPurple dark:hover:bg-lightPurple/90 text-white
                                         ${currentStep === 'quiz' && isAnswerSubmitted && 'bg-green-600 hover:bg-green-700'}`}
@@ -460,7 +460,7 @@ export const columns: ColumnDef<Incident>[] = [
 
               {/*<DropdownMenuItem className="cursor-pointer">View dashcam footage</DropdownMenuItem>*/}
               <Dialog>
-                <DialogTrigger className="hover:bg-gray-100 w-full cursor-pointer relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden">
+                <DialogTrigger className="dark:hover:bg-midBlue/30 hover:bg-gray-100 w-full hover:cursor-pointer relative flex items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden">
                   View dashcam footage
                 </DialogTrigger>
                 <DialogContent className='p-6'>
@@ -481,7 +481,7 @@ export const columns: ColumnDef<Incident>[] = [
               </Dialog>
               <DropdownMenuSeparator />
               <AlertDialog>
-                <AlertDialogTrigger className="hover:bg-gray-100 w-full text-red-500 cursor-pointer relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden">Delete incident</AlertDialogTrigger>
+                <AlertDialogTrigger className="dark:hover:bg-midBlue/30 hover:bg-gray-100 w-full text-red-500 hover:cursor-pointer relative flex items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden">Delete incident</AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader className="flex flex-col gap-4">
                     <AlertDialogTitle>Delete confirmation</AlertDialogTitle>
