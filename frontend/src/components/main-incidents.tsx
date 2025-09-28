@@ -33,6 +33,7 @@ async function getData(): Promise<Incident[]> {
         ? words.slice(0, 5).join(' ') + '...'
         : incident.incident_summary;
       return {
+        key: incident.incident_id,
         id: incident.incident_id.split('-')[0],
         type: trimmedSummary,
         severity: incident.severity,
