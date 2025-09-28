@@ -66,7 +66,7 @@ export function MainIncidents({ className, ...props }: React.ComponentProps<"div
     }, []);
 
     return (
-        <div className={cn("flex flex-col gap-6 p-8", className)} {...props}>
+        <div className={cn("flex flex-col gap-6 max-sm:p-4 p-8", className)} {...props}>
             <div className="flex flex-col gap-3 min-h-[80px] h-1/8">
                 <h1 className="text-4xl font-extrabold">Incidents</h1>
                 <div className="flex justify-between gap-20">
