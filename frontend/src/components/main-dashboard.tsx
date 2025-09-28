@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
-import { Trophy, ChartNoAxesColumnIncreasing, MoveRight} from 'lucide-react';
+import { Trophy, ChartNoAxesColumnIncreasing, MoveRight, CircleStar, Award, Medal, ArrowUpRight} from 'lucide-react';
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface Achievement {
   id: string;
@@ -74,9 +74,13 @@ function MainDashboard({ stats, className, ...props }: any) {
             <div className="flex flex-col flex-1 gap-2 py-3">
               {achievements.length > 0 ? (
                   achievements.map((ach) => (
-                    <div key={ach.id} className="bg-darkPurple/15 rounded-lg border flex-1 cursor-pointer hover:bg-darkPurple/5 transition-all p-4 flex items-center">
+                    <Link to="/quizzes" key={ach.id} className="group relative flex gap-2 bg-darkPurple/15 rounded-lg border flex-1 cursor-pointer hover:bg-darkPurple/5 transition-all p-4 flex items-center">
+                      <Award />
                       <p className="font-medium">{ach.achievement_name}</p>
-                    </div>
+                      <ArrowUpRight 
+                        className="absolute top-4 right-4 w-6 h-6 text-gray-500 opacity-0 transition-opacity duration-300 group-hover:opacity-100" 
+                      />
+                    </Link>
                   ))
                 ) : (
                     <>
@@ -96,7 +100,7 @@ function MainDashboard({ stats, className, ...props }: any) {
               <p className="text-xl font-bold">Your Stats</p>
             </div>
             <div className="flex flex-col flex-1 gap-3 py-3">
-              <div className="flex justify-center bg-darkPurple/15 rounded-lg border flex-1 cursor-pointer hover:bg-darkPurple/5 transition-all group relative">
+              <Link to="/quizzes" className="flex justify-center bg-darkPurple/15 rounded-lg border flex-1 cursor-pointer hover:bg-darkPurple/5 transition-all group relative">
                 <div className="flex flex-col items-center justify-center py-2">
                   <p className="text-4xl">{stats?.safety_score}</p>
                   <p className="text-sm">safety score</p>
@@ -104,9 +108,9 @@ function MainDashboard({ stats, className, ...props }: any) {
                 <div className="absolute right-5 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
                   <MoveRight className="w-10 h-10" />
                 </div>
-              </div>
+              </Link>
   
-              <div className="flex justify-center bg-darkPurple/15 rounded-lg border flex-1 cursor-pointer hover:bg-darkPurple/5 transition-all group relative">
+              <Link to="/quizzes" className="flex justify-center bg-darkPurple/15 rounded-lg border flex-1 cursor-pointer hover:bg-darkPurple/5 transition-all group relative">
                 <div className="flex flex-col items-center justify-center py-2">
                   <p className="text-4xl">{stats?.daily_quiz_streak}</p>
                   <p className="text-sm">daily quiz streak</p>
@@ -114,9 +118,9 @@ function MainDashboard({ stats, className, ...props }: any) {
                 <div className="absolute right-5 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
                   <MoveRight className="w-10 h-10" />
                 </div>
-              </div>
+              </Link>
   
-              <div className="flex justify-center bg-darkPurple/15 rounded-lg border flex-1 cursor-pointer hover:bg-darkPurple/5 transition-all group relative">
+              <Link to="/incidents" className="flex justify-center bg-darkPurple/15 rounded-lg border flex-1 cursor-pointer hover:bg-darkPurple/5 transition-all group relative">
                 <div className="flex flex-col items-center justify-center py-2">
                   <p className="text-4xl">{stats?.resolved_incidents}</p>
                   <p className="text-sm">resolved incidents</p>
@@ -124,7 +128,7 @@ function MainDashboard({ stats, className, ...props }: any) {
                 <div className="absolute right-5 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
                   <MoveRight className="w-10 h-10" />
                 </div>
-              </div>
+              </Link>
             </div>
           </div>
         </div>
