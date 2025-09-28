@@ -4,7 +4,7 @@ from firebase_admin import firestore
 from services.gemini_service import generate_quiz_from_topic, generate_new_quiz_with_new_topic
 from core.firebase_setup import db
 from core.security import get_current_user
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from typing import List
 import random
 
@@ -209,13 +209,28 @@ def submit_quiz_transactional(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User profile not found")
 
     user_data = user_doc.to_dict()
-    new_streak = user_data.get("daily_quiz_streak", 0) + 1
+    user_streak = user_data.get("daily_quiz_streak", 0)
+    last_completion = user_data.get("last_daily_quiz", None)
+    
     current_safety_score = user_data.get("safety_score", 75)
     score_adjustment = (final_score - 50) / 10
     new_safety_score = max(0, min(100, current_safety_score + score_adjustment))
+    
+    today = date.today()
+    yesterday = today - timedelta(days=1)
+    
+    last_completion_date = last_completion.date() if last_completion else None
+    
+    if last_completion_date == yesterday:
+        user_streak += 1 # User maintains streak
+    elif last_completion_date == today:
+        pass # Streak doesn't change
+    else:
+        user_streak = 1 # Streak reset to 1 on new day
 
     transaction.update(user_ref, {
-        "daily_quiz_streak": new_streak,
+        "last_daily_quiz": datetime.now(),
+        "daily_quiz_streak": user_streak,
         "safety_score": round(new_safety_score, 2)
     })
 
@@ -235,7 +250,7 @@ def submit_quiz_transactional(
         "completed_at": completed_at,
         "final_score": final_score,
         "correct_count": correct_count,
-        "new_quiz_streak": new_streak,
+        "new_quiz_streak": user_streak,
         "results": question_results
     }
 
