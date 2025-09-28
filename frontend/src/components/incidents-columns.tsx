@@ -356,10 +356,30 @@ export const columns: ColumnDef<Incident>[] = [
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
               
-              {/* Renders the multi-step dialog */}
+              {/* Renders the multi-step dialog for view incidents details */}
               <IncidentReviewFlow incident={incident} />
 
-              <DropdownMenuItem className="cursor-pointer">View dashcam footage</DropdownMenuItem>
+              {/*<DropdownMenuItem className="cursor-pointer">View dashcam footage</DropdownMenuItem>*/}
+              <Dialog>
+                <DialogTrigger className="hover:bg-gray-100 w-full cursor-pointer relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden">
+                  View dashcam footage
+                </DialogTrigger>
+                <DialogContent className='p-6'>
+                  <DialogHeader>
+                    <DialogTitle>Original Dashcam Video</DialogTitle>
+                  </DialogHeader>
+                  <div className="aspect-video"> 
+                    <video
+                      controls
+                      poster=""
+                      src=""
+                      className="w-full h-full rounded-lg" 
+                    >
+                      Your browser does not support the video tag.
+                    </video>
+                  </div>
+                </DialogContent>
+              </Dialog>
               <DropdownMenuSeparator />
               <AlertDialog>
                 <AlertDialogTrigger className="hover:bg-gray-100 w-full text-red-500 cursor-pointer relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden">Delete incident</AlertDialogTrigger>
