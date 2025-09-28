@@ -49,6 +49,7 @@ export type Incident = {
   severity: "low" | "medium" | "high"
   date: string
   time: string
+  video_url: string
 }
 
 type Step = 'details' | 'quiz' | 'explanation' | 'summary';
@@ -90,6 +91,8 @@ export const IncidentReviewFlow = ({ incident }: { incident: Incident }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [selectedAnswerIndex, setSelectedAnswerIndex] = useState<number | null>(null);
+
+
 
     useEffect(() => {
         const fetchIncidentDetails = async () => {
@@ -468,7 +471,7 @@ export const columns: ColumnDef<Incident>[] = [
                     <video
                       controls
                       poster=""
-                      src=""
+                      src={incident.video_url} 
                       className="w-full h-full rounded-lg" 
                     >
                       Your browser does not support the video tag.
