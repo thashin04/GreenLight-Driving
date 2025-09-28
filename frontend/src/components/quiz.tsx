@@ -53,27 +53,23 @@ export function QuizCard({
     setSelectedAnswers(newAnswers);
     // Note: The immediate feedback will still be broken unless the backend API is changed
     // to send the answers with the questions. This fix focuses on the final score.
-    setShowResult(true);
   };
 
   const handleNext = () => {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
-      setShowResult(selectedAnswers[currentQuestion + 1] !== -1);
     }
   };
 
   const handlePrevious = () => {
     if (currentQuestion > 0) {
       setCurrentQuestion(currentQuestion - 1);
-      setShowResult(selectedAnswers[currentQuestion - 1] !== -1);
     }
   };
 
   const handleStartQuiz = () => {
     setCurrentQuestion(0);
     setSelectedAnswers(new Array(questions.length).fill(-1));
-    setShowResult(false);
     setIsQuizCompleted(false);
     setFinalScore(0);
     setBackendResults([]);

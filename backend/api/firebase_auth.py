@@ -33,7 +33,7 @@ def create_user(user_data: UserCreate):
             'first_name': user_data.first_name,
             'last_name': user_data.last_name,
             'createdAt': new_user.user_metadata.creation_timestamp,
-            'safety_score': 0,
+            'safety_score': 75,
             'daily_quiz_streak': 0,
             'resolved_incidents': 0,
         })
@@ -112,7 +112,7 @@ def login_via_google_token(token_data: GoogleLoginToken):
                 'first_name': user_info.display_name.split(' ')[0] if user_info.display_name else '',
                 'last_name': ' '.join(user_info.display_name.split(' ')[1:]) if user_info.display_name and ' ' in user_info.display_name else '',
                 'createdAt': user_info.user_metadata.creation_timestamp,
-                'safety_score': 0,
+                'safety_score': 75,
                 'daily_quiz_streak': 0,
                 'resolved_incidents': 0,
             })
