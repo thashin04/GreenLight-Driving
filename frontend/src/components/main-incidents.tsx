@@ -40,6 +40,7 @@ async function getData(): Promise<Incident[]> {
         date: createdAt.toLocaleDateString(),
         time: createdAt.toLocaleTimeString(),
         status: incident.status,
+        video_url: incident.video_url,
       };
     });
 
