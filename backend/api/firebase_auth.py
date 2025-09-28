@@ -5,6 +5,8 @@ from firebase_admin import auth, exceptions
 import requests
 import os
 from dotenv import load_dotenv
+from pydantic import BaseModel
+from core.security import create_access_token
 
 load_dotenv()
 
@@ -31,7 +33,7 @@ def create_user(user_data: UserCreate):
             'first_name': user_data.first_name,
             'last_name': user_data.last_name,
             'createdAt': new_user.user_metadata.creation_timestamp,
-            'safety_score': 0,
+            'safety_score': 75,
             'daily_quiz_streak': 0,
             'resolved_incidents': 0,
         })
@@ -78,11 +80,46 @@ def login_user(user_data: UserLogin):
         
         # auth token
         id_token = response_data.get("idToken")
+        uid = response_data.get("localId")
+
+        app_access_token = create_access_token(data={"sub": uid})
         
-        return {"token_type": "bearer", "access_token": id_token}
+        return {"token_type": "bearer", "access_token": app_access_token}
 
     except requests.exceptions.RequestException as e:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail=f"Could not connect to Firebase Auth API: {str(e)}"
         )
+
+class GoogleLoginToken(BaseModel):
+    token: str
+
+@router.post("/google/login")
+def login_via_google_token(token_data: GoogleLoginToken):
+    try:
+        decoded_token = firebase_auth.verify_id_token(token_data.token)
+        uid = decoded_token['uid']
+        email = decoded_token['email']
+        
+        user_doc_ref = db.collection('users').document(uid)
+        user_doc = user_doc_ref.get()
+        
+        if not user_doc.exists:
+            user_info = firebase_auth.get_user(uid)
+            user_doc_ref.set({
+                'email': email,
+                'first_name': user_info.display_name.split(' ')[0] if user_info.display_name else '',
+                'last_name': ' '.join(user_info.display_name.split(' ')[1:]) if user_info.display_name and ' ' in user_info.display_name else '',
+                'createdAt': user_info.user_metadata.creation_timestamp,
+                'safety_score': 75,
+                'daily_quiz_streak': 0,
+                'resolved_incidents': 0,
+            })
+
+        app_access_token = create_access_token(data={"sub": uid})
+
+        return {"token_type": "bearer", "access_token": app_access_token}
+
+    except Exception as e:
+        raise HTTPException(status_code=401, detail=f"Invalid Google token: {e}")
