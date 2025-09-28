@@ -62,7 +62,13 @@ function MainQuizzes({ className, ...props }: React.ComponentProps<"div">) {
                             </div>
                             <p className="text-sm">Insert yap and topic stuff :3</p>
                         </div>
-                        <div className="flex flex-1 rounded-lg border border-midBlue/20 bg-white/20 dark:bg-midBlue/40  hover:bg-white/10 transition-all"></div>
+                        <QuizCard
+                            Icon={Hand}
+                            title="Stop Sign Rules"
+                            description="Master proper stop sign procedures"
+                            questionCount=""
+                            onStartQuiz={() => console.log('stop sign rules quiz started')}
+                        />
                     </div>
                 </div>
 
@@ -70,9 +76,27 @@ function MainQuizzes({ className, ...props }: React.ComponentProps<"div">) {
                 <div className="flex flex-col gap-3 w-1/3 rounded-lg border-1 border-midBlue/40 dark:border-darkPurple/35 bg-white/30 dark:bg-darkBlue/50 backdrop-blur-3xl px-3 py-5">
                     <h1 className="text-xl font-medium">Recent Quizzes</h1>
                     <div className="flex flex-col flex-1 gap-3 justify-center">
-                        <div className="flex justify-end items-center flex-1 rounded-lg border border-midBlue/20 bg-darkPurple/15 hover:bg-darkPurple/5 transition-all px-2 h-[60px]"></div>
-                        <div className="flex justify-end items-center flex-1 rounded-lg border border-midBlue/20 bg-darkPurple/15 hover:bg-darkPurple/5 transition-all px-2 h-[60px]"></div>
-                        <div className="flex justify-end items-center flex-1 rounded-lg border border-midBlue/20 bg-darkPurple/15 hover:bg-darkPurple/5 transition-all px-2 h-[60px]"></div>
+                        <div className="flex items-center justify-between rounded-lg border border-midBlue/20 transition-all flex-1 min-h-[60px] h-[60px] px-5 py-3 bg-white/20 dark:bg-midBlue/40 hover:bg-darkPurple/5">
+                            <div className="flex items-center gap-3">
+                                <Hand className="w-6 h-6" /> 
+                                <p className="text-md font-medium">Stop Sign Rules</p>
+                            </div>
+                            <p>100%</p>
+                        </div>
+                        <div className="flex items-center justify-between rounded-lg border border-midBlue/20 transition-all flex-1 min-h-[60px] h-[60px] px-5 py-3 bg-white/20 dark:bg-midBlue/40 hover:bg-darkPurple/5">
+                            <div className="flex items-center gap-3">
+                                <CarFront className="w-6 h-6" /> 
+                                <p className="text-md font-medium">Defensive Driving</p>
+                            </div>
+                            <p>80%</p>
+                        </div>
+                        <div className="flex items-center justify-between rounded-lg border border-midBlue/20 transition-all flex-1 min-h-[60px] h-[60px] px-5 py-3 bg-white/20 dark:bg-midBlue/40 hover:bg-darkPurple/5">
+                            <div className="flex items-center gap-3">
+                                <Move className="w-6 h-6" /> 
+                                <p className="text-md font-medium">4-Way Intersections</p>
+                            </div>
+                            <p>60%</p>
+                        </div>
                     </div>
                 </div>
             </div>
