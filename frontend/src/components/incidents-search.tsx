@@ -9,12 +9,13 @@ interface IncidentsFilterProps {
 
 export function IncidentsSearch({ value, onChange }: IncidentsFilterProps) {
   return (
-    <div className="flex flex-1 justify-end min-w-[100px]">
+    <div className="md:flex md:flex-1 md:justify-end md:min-w-[100px] w-full">
       <Input
         placeholder="Filter by ID..."
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="max-w-sm"
+        className="w-full md:max-w-md text-darkBlue border-midBlue/60
+        dark:text-lightPurple dark:border-darkPurple/70" 
       />
     </div>
   )

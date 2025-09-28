@@ -67,14 +67,14 @@ export function MainIncidents({ className, ...props }: React.ComponentProps<"div
 
     return (
         <div className={cn("flex flex-col gap-6 max-sm:p-4 p-8", className)} {...props}>
-            <div className="flex flex-col gap-3 min-h-[80px] h-1/8">
-                <h1 className="text-4xl font-extrabold">Incidents</h1>
-                <div className="flex justify-between gap-20">
-                    <p>Review and analyze driving incidents captured by your dashcam</p>
-                    <IncidentsSearch 
-                        value={filterValue}
-                        onChange={setFilterValue}
-                    />
+            <div className="flex flex-col gap-3 min-h-[80px]">
+                <h1 className="text-4xl font-extraboldtext-4xl max-sm:text-3xl font-extrabold">Incidents</h1>
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                  <p>Review and analyze driving incidents</p>
+                  <IncidentsSearch 
+                    value={filterValue}
+                    onChange={setFilterValue}
+                  />
                 </div>
             </div>
             <div className="h-7/8 container mx-auto">
