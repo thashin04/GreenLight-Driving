@@ -189,7 +189,7 @@ export const IncidentReviewFlow = ({ incident }: { incident: Incident }) => {
                 return <ResultSummary />;
             case 'explanation':
                 return (
-                      <div className='flex flex-col gap-3 px-6 dark:bg-darkBlue bg-lightPurple text-darkBlue dark:text-lightPurple'>
+                      <div className='flex flex-col gap-3 px-6'>
                           <div className="aspect-video rounded-lg">
                               <iframe
                                   title="Incident Simulation"
@@ -210,7 +210,7 @@ export const IncidentReviewFlow = ({ incident }: { incident: Incident }) => {
                             <iframe
                                 title="Incident Simulation"
                                 srcDoc={incidentData.simulation_html}
-                                className="w-full h-full rounded-lg dark:!bg-darkBlue !bg-lightPurple !text-darkBlue dark:!text-lightPurple"
+                                className="w-full h-full rounded-lg"
                                 style={{ border: 'none' }} // Optional: remove default iframe border
                             />
                         </div>
@@ -232,9 +232,9 @@ export const IncidentReviewFlow = ({ incident }: { incident: Incident }) => {
                     <div 
                         key={index} 
                         className={`p-3 rounded-lg border cursor-pointer transition-all duration-150 
-                                    ${selectedAnswerIndex === index && !isAnswerSubmitted ? 'bg-blue-100 border-blue-500' : ''}
-                                    ${isAnswerSubmitted && index === quiz.correct_answer_index ? 'bg-green-100 border-green-500' : ''}
-                                    ${isAnswerSubmitted && selectedAnswerIndex === index && selectedAnswerIndex !== quiz.correct_answer_index ? 'bg-red-100 border-red-500' : ''}
+                                    ${selectedAnswerIndex === index && !isAnswerSubmitted ? 'dark:bg-darkPurple/30 bg-darkPurple/10 border-blue-500' : ''}
+                                    ${isAnswerSubmitted && index === quiz.correct_answer_index ? 'bg-green-100/20 border-green-700' : ''}
+                                    ${isAnswerSubmitted && selectedAnswerIndex === index && selectedAnswerIndex !== quiz.correct_answer_index ? 'bg-red-400/20 border-red-500' : ''}
                                     `}
                         onClick={() => !isAnswerSubmitted && setSelectedAnswerIndex(index)}
                     >
