@@ -25,7 +25,7 @@ export default function QuizzesPage() {
           <AppSidebar />
           <MobileNav routes={mobileRoutes} />
           <SidebarInset>
-            <MainQuizzes className="min-h-[100vh] flex-1 rounded-xl md:min-h-min m-12 mb-28 bg-white/30 border-accent/40 dark:bg-darkBlue/50 dark:border-darkBlue/50 border-1 backdrop-blur-3xl shadow-lg text-midBlue dark:text-lightPurple" />
+            <MainQuizzes className="min-h-[100vh] flex-1 rounded-xl md:min-h-min m-12 max-sm:m-4 mb-28 bg-white/30 border-accent/40 dark:bg-darkBlue/50 dark:border-darkBlue/50 border-1 backdrop-blur-3xl shadow-lg text-midBlue dark:text-lightPurple" />
           </SidebarInset>
         </div>
       </SidebarProvider>

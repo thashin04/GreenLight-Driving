@@ -174,19 +174,19 @@ export function QuizCard({
     <div className="flex justify-between items-center px-5 py-3 rounded-lg border border-midBlue/20 bg-white/20 dark:bg-midBlue/40 min-h-[75px] flex-1 hover:bg-white/10 transition-all">
       <div className="flex items-center gap-3">
         <Icon className="w-6 h-6" /> 
-        <div className="flex flex-col">
-          <p className="text-md font-medium">{title}</p>
-          <p className="text-xs">{description}</p>
+        <div className="flex pr-2 flex-col">
+          <p className="text-md max-sm:text-sm font-medium">{title}</p>
+          <p className="text-xs max-sm:hidden">{description}</p>
         </div>
       </div>
       
-      <div className="flex gap-3 items-center">
-        <p>{questionCount}</p>
+      <div className="flex gap-3 items-center max-sm:text-xs">
+        <p className="max-sm:hidden">{questionCount}</p>
         
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger
             onClick={handleStartQuiz}
-            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive text-primary-foreground h-9 px-4 py-2 has-[>svg]:px-3 cursor-pointer bg-midBlue hover:bg-darkBlue dark:bg-lightPurple dark:hover:bg-lightPurple/90"
+            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive text-primary-foreground h-9 px-4 py-2 max-sm:px-3 has-[>svg]:px-3 max-sm:text-xs cursor-pointer bg-midBlue hover:bg-darkBlue dark:bg-lightPurple dark:hover:bg-lightPurple/90"
           >
             Start Quiz 
           </DialogTrigger>

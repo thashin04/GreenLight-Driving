@@ -15,9 +15,9 @@ import {
 
 function MainQuizzes({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    <div className={cn("flex flex-col gap-6 p-8 max-h-[120vh]", className)} {...props}>
-        <div className="flex flex-col gap-3 min-h-[80px] h-1/8">
-            <h1 className="text-4xl font-extrabold">Quizzes</h1>
+    <div className={cn("flex flex-col gap-6 max-sm:p-4 p-8 ", className)} {...props}>
+        <div className="flex flex-col gap-3 min-h-[80px] ">
+            <h1 className="text-4xl max-sm:text-3xl font-extrabold">Quizzes</h1>
             <p>Test your knowledge and improve your driving safety score</p>
         </div>
 
@@ -25,26 +25,26 @@ function MainQuizzes({ className, ...props }: React.ComponentProps<"div">) {
         <div className="flex flex-col gap-6 h-7/8">
 
             {/* Score stats and Today's Daily Challenge and Recent Quizzes Container */}
-            <div className="flex flex-col xl:flex-row gap-6 min-h-[40vh]">
+            <div className="flex flex-col xl:flex-row gap-6">
 
                 {/* Score stats and Today's Daily Challenge Container */}
                 <div className="flex flex-col gap-6 w-full xl:w-2/3">
-                    <div className="flex gap-3">
-                        <div className="flex-1 rounded-xl border-1 border-midBlue/40 dark:border-darkPurple/35 bg-white/30 dark:bg-darkBlue/50 backdrop-blur-3xl px-3 pt-3 pb-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div className="rounded-xl border-1 border-midBlue/40 dark:border-darkPurple/35 bg-white/30 dark:bg-darkBlue/50 backdrop-blur-3xl px-3 pt-3 pb-6">
                             <div className="flex justify-between">
                                 <p className="text-sm">Quizzes Taken</p>
                                 <ClipboardCheck className="w-5 h-5"/>
                             </div>
                             <p className="text-xl font-bold">24</p>
                         </div>
-                        <div className="flex-1 rounded-xl border-1 border-midBlue/40 bg-white/30 dark:bg-darkBlue/50  backdrop-blur-3xl px-3 pt-3 pb-6">
+                        <div className="rounded-xl border-1 border-midBlue/40 bg-white/30 dark:bg-darkBlue/50 backdrop-blur-3xl px-3 pt-3 pb-6">
                             <div className="flex justify-between">
                                 <p className="text-sm">Average Score</p>
                                 <ChartLine className="w-5 h-5"/>
                             </div>
                             <p className="text-xl font-bold">87%</p>
                         </div>
-                        <div className="flex-1 rounded-xl border-1 border-midBlue/40 bg-white/30 dark:bg-darkBlue/50 backdrop-blur-3xl px-3 pt-3 pb-6">
+                        <div className="rounded-xl border-1 border-midBlue/40 bg-white/30 dark:bg-darkBlue/50 backdrop-blur-3xl px-3 pt-3 pb-6">
                             <div className="flex justify-between">
                                 <p className="text-sm">Streak</p>
                                 <Flame className="w-5 h-5"/>
