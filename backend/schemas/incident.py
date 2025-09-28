@@ -36,7 +36,7 @@ class IncidentQuizSubmission(BaseModel):
     selected_answer_index: int
 
 class Incident(BaseModel):
-    incident_id: UUID = Field(default_factory=uuid4)
+    incident_id: str = Field(default_factory=lambda: str(uuid4()))
     user_id: str
     status: IncidentStatus = IncidentStatus.OPEN
     created_at: datetime = Field(default_factory=datetime.utcnow)

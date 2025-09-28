@@ -8,4 +8,5 @@ requests
 pydantic[email]
 google-generativeai
 apscheduler
+google-adk>=1.15.0
 python-jose[cryptography]
