@@ -1,0 +1,60 @@
+from google.adk.tools import FunctionTool
+from schemas.incident import Incident
+from core.firebase_setup import db
+from datetime import datetime
+import uuid
+
+from core.gemini_setup import gemini_pro_model
+
+def process_video_and_generate_simulations(video_url: str) -> dict:
+    prompt = f"""
+    ROLE: You are an expert system combining a traffic analyst and a senior Three.js developer.
+    TASK: Analyze the driving incident from the video at {video_url} and prepare a complete lesson with simulations.
+
+    OUTPUT:
+    You MUST output a single, valid JSON object and nothing else. The JSON object must contain these exact keys:
+    - "analysis": An object containing "incident_summary", "severity", and "better_action_quiz".
+    - "simulation_actual_html": A string containing the complete, self-contained HTML/JS code for a simulation of what ACTUALLY happened.
+    - "simulation_better_outcome_html": A string containing the complete, self-contained HTML/JS code for a simulation of the BETTER outcome.
+
+    CRITICAL REQUIREMENTS FOR JSON STRUCTURE:
+    1.  The "severity" value MUST be one of three exact lowercase strings: "low", "medium", or "high".
+    2.  The "better_action_quiz" object MUST strictly follow this exact format:
+        {{
+          "question": "A string for the question.",
+          "options": ["A string for option 1", "A string for option 2", "A string for option 3", "A string for option 4"],
+          "correct_answer_index": <An integer from 0 to 3>,
+          "explanation": "A string explaining the correct answer."
+        }}
+
+    CRITICAL REQUIREMENTS FOR SIMULATIONS:
+    1.  NO SYNTAX ERRORS: The generated code must be 100% complete and runnable.
+    2.  FOLLOW THE CAR: The camera must be a 'chase camera' positioned behind and slightly above the main vehicle.
+    3.  CONTROLS AND REPLAY: Add a 'Pause/Play' button. The animation must automatically loop.
+    """
+    response = gemini_pro_model.generate_content(prompt)
+    return response.text
+
+def save_incident_report(user_id: str, video_url: str, full_report_data: dict) -> dict:
+    incident_id = str(uuid.uuid4())
+    
+    analysis_data = full_report_data.get("analysis", {})
+    
+    incident_data = Incident(
+        incident_id=incident_id,
+        user_id=user_id,
+        created_at=datetime.now(),
+        video_url=video_url,
+        incident_summary=analysis_data.get("incident_summary"),
+        severity=analysis_data.get("severity"),
+        quiz=analysis_data.get("better_action_quiz"),
+        simulation_html=full_report_data.get("simulation_actual_html"),
+        simulation_better_html=full_report_data.get("simulation_better_outcome_html")
+    )
+    
+    incident_dict = incident_data.model_dump()
+    db.collection('incidents').document(incident_id).set(incident_dict)
+    return incident_dict
+
+processing_tool = FunctionTool(func=process_video_and_generate_simulations)
+save_report_tool = FunctionTool(func=save_incident_report)

@@ -4,14 +4,16 @@ from fastapi.responses import StreamingResponse
 from core.security import get_current_user
 from core.firebase_setup import db, bucket
 from firebase_admin import firestore
-from schemas.incident import Incident, IncidentQuizSubmission, SeverityLevel
-from services.gemini_service import analyze_video_for_simulation_data, generate_dual_simulation_from_analysis
+from schemas.incident import Incident, IncidentQuizSubmission
 from datetime import datetime
+from google.genai import types
+from core.adk_setup import runner, session_service
 import shutil
 import os
 import uuid
 import zipfile
 import io
+import json
 
 from services.video_splitter import process_video_to_screenshots
 
@@ -93,37 +95,40 @@ async def analyze_driving_video(
         blob.upload_from_file(file.file, content_type=file.content_type)
         blob.make_public()
         video_url = blob.public_url
-
-        # Run Prompt 1
-        analysis_json = analyze_video_for_simulation_data(video_url)
-        if not analysis_json:
-            raise HTTPException(status_code=500, detail="Failed to analyze video")
         
-        # Run Prompt 2
-        simulation_package = generate_dual_simulation_from_analysis(analysis_json)
-        if not simulation_package:
-            raise HTTPException(status_code=500, detail="Failed to generate simulation")
+        session_id = str(uuid.uuid4())
+        agent_prompt = f"Process the driving incident from the video at {video_url} for user {uid}."
         
-        new_incident = Incident(
+        await session_service.create_session(
+            app_name="driving_analysis_agent",
             user_id=uid,
-            created_at=datetime.now(),
-            
-            incident_summary=analysis_json.get("incident_summary", "No summary"),
-            severity=SeverityLevel(analysis_json.get("severity", "Unknown")),
-            video_url=video_url,
-            
-            quiz=simulation_package.get("quiz"),
-            simulation_html=simulation_package.get("simulation_actual_html"),
-            simulation_better_html=simulation_package.get("simulation_better_outcome_html")
+            session_id=session_id
         )
-        data_to_store = new_incident.model_dump(mode='json')
 
-        incident_id_str = str(new_incident.incident_id)
-        
-        # Save the record to Firestore
-        db.collection('incidents').document(incident_id_str).set(data_to_store)
-        
-        return new_incident
+        events = runner.run_async(
+            user_id=uid,
+            session_id=session_id,
+            new_message=types.Content(parts=[types.Part(text=agent_prompt)], role="user")
+        )
+
+        final_result = None
+        async for event in events:
+            if event.is_final_response():
+                # Access first part of the content
+                json_string = event.content.parts[0].text
+                
+                # Clean the string by removing the markdown ```json 
+                clean_json_string = json_string.strip().replace("```json", "").replace("```", "")
+                
+                # Parse the clean string into a Python dictionary
+                final_result = json.loads(clean_json_string)
+                
+                break
+
+        if final_result is None:
+            raise Exception("Agent did not produce a final result.")
+
+        return final_result
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
