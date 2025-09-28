@@ -6,108 +6,46 @@ import { useEffect, useState } from "react";
 import { IncidentsSearch } from "./incidents-search";
 
 async function getData(): Promise<Incident[]> {
-  // Fetch data from API here
-  return [
-    {
-        id: "ID-abc",
-        type: "good", 
-        severity: "low", 
-        date: "2025-12-12",
-        time: "00:00:00"
-    },
-    {
-        id: "ID-bitch",
-        type: "bad", 
-        severity: "medium", 
-        date: "2025-12-12",
-        time: "00:00:00"
-    },
-    {
-        id: "ID-hi",
-        type: "worse", 
-        severity: "high", 
-        date: "2025-12-12",
-        time: "00:00:00"
-    },
-    {
-        id: "ID-yas",
-        type: "bad", 
-        severity: "high", 
-        date: "2025-12-12",
-        time: "00:00:00"
-    },
-    {
-        id: "ID",
-        type: "bad", 
-        severity: "low", 
-        date: "2025-12-12",
-        time: "00:00:00"
-    },
-    {
-        id: "ID",
-        type: "bad", 
-        severity: "high", 
-        date: "2025-12-12",
-        time: "00:00:00"
-    },
-    {
-        id: "ID",
-        type: "bad",  
-        severity: "low", 
-        date: "2025-12-12",
-        time: "00:00:00"
-    },
-   {
-        id: "ID",
-        type: "good", 
-        severity: "low", 
-        date: "2025-12-12",
-        time: "00:00:00"
-    },
-    {
-        id: "ID",
-        type: "bad", 
-        severity: "medium", 
-        date: "2025-12-12",
-        time: "00:00:00"
-    },
-    {
-        id: "ID",
-        type: "worse", 
-        severity: "high", 
-        date: "2025-12-12",
-        time: "00:00:00"
-    },
-    {
-        id: "ID",
-        type: "bad", 
-        severity: "high", 
-        date: "2025-12-12",
-        time: "00:00:00"
-    },
-    {
-        id: "ID",
-        type: "bad", 
-        severity: "low", 
-        date: "2025-12-12",
-        time: "00:00:00"
-    },
-    {
-        id: "ID",
-        type: "bad", 
-        severity: "high", 
-        date: "2025-12-12",
-        time: "00:00:00"
-    },
-    {
-        id: "ID",
-        type: "bad",  
-        severity: "low", 
-        date: "2025-12-12",
-        time: "00:00:00"
-    },
-    
-  ]
+  const token = localStorage.getItem("accessToken");
+  if (!token) {
+    console.error("Authentication token not found.");
+    return [];
+  }
+
+  try {
+    const response = await fetch("http://127.0.0.1:8000/incidents/getAll", {
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch incidents.");
+    }
+
+    const backendIncidents = await response.json();
+
+    return backendIncidents.map((incident: any) => {
+      const createdAt = new Date(incident.created_at);
+
+      const words = incident.incident_summary.split(' ');
+      const trimmedSummary = words.length > 5
+        ? words.slice(0, 5).join(' ') + '...'
+        : incident.incident_summary;
+      return {
+        id: incident.incident_id.split('-')[0],
+        type: trimmedSummary,
+        severity: incident.severity,
+        date: createdAt.toLocaleDateString(),
+        time: createdAt.toLocaleTimeString(),
+        status: incident.status,
+      };
+    });
+
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return []; 
+  }
 }
 
 export function MainIncidents({ className, ...props }: React.ComponentProps<"div">) {
@@ -128,15 +66,15 @@ export function MainIncidents({ className, ...props }: React.ComponentProps<"div
     }, []);
 
     return (
-        <div className={cn("flex flex-col gap-6 p-8", className)} {...props}>
-            <div className="flex flex-col gap-3 min-h-[80px] h-1/8">
-                <h1 className="text-4xl font-extrabold">Incidents</h1>
-                <div className="flex justify-between gap-20">
-                    <p>Review and analyze driving incidents captured by your dashcam</p>
-                    <IncidentsSearch 
-                        value={filterValue}
-                        onChange={setFilterValue}
-                    />
+        <div className={cn("flex flex-col gap-6 max-sm:p-4 p-8", className)} {...props}>
+            <div className="flex flex-col gap-3 min-h-[80px]">
+                <h1 className="text-4xl font-extraboldtext-4xl max-sm:text-3xl font-extrabold">Incidents</h1>
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                  <p>Review and analyze driving incidents</p>
+                  <IncidentsSearch 
+                    value={filterValue}
+                    onChange={setFilterValue}
+                  />
                 </div>
             </div>
             <div className="h-7/8 container mx-auto">

@@ -8,3 +8,4 @@ requests
 pydantic[email]
 google-generativeai
 apscheduler
+python-jose[cryptography]
