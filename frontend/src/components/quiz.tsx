@@ -213,10 +213,12 @@ export function QuizCard({
                             // This part of the logic will not work as expected until the
                             // correct_answer_index is sent from the backend initially.
                             // For now, it will likely show most answers as incorrect.
+                            // console.log("Correct answer index:", correct_answer_index);
+                            // console.log("User answer index:", index);
                             if (index === correct_answer_index) {
                               buttonStyle = 'bg-green-100 border-green-500 text-green-700 dark:bg-green-900/20 dark:border-green-400 dark:text-green-300';
                             } else if (index === userAnswer && index !== correct_answer_index) {
-                              buttonStyle = 'bg-red-100 border-red-500 text-red-700 dark:bg-red-900/20 dark:border-red-400 dark:text-red-300';
+                              buttonStyle = 'bg-gray-100 border-gray-500 text-gray-700 dark:bg-gray-900/20 dark:border-gray-400 dark:text-gray-300';
                             } else {
                               buttonStyle = 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700';
                             }
@@ -239,7 +241,7 @@ export function QuizCard({
                                     ? index === correct_answer_index
                                       ? 'border-green-500 dark:border-green-400'
                                       : index === userAnswer && index !== correct_answer_index
-                                      ? 'border-red-500 dark:border-red-400'
+                                      ? 'border-gray-500 dark:border-gray-400'
                                       : 'border-gray-300 dark:border-gray-600'
                                     : userAnswer === index
                                     ? 'border-midBlue dark:border-lightPurple'
